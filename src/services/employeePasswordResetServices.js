@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const{EmployeeRepository}=require('../repository/index')
 const mailSend=require('../utils/nodemailer')

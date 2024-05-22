@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const otpgenerator = require('otp-generator');
 const OTP = require('../models/otp');
 const {EmployeeRepository} = require('../repository/index');

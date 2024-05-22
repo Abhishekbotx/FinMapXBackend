@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const OTP = require('../models/otp');
 const {EmployeeRepository,AdminAuthRepository} = require('../repository/index');
 const { ServiceError, ValidationError, ClientError } = require('../utils/errors/index');
