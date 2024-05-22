@@ -10,10 +10,10 @@ const path = require('path');
 
 
 const allowedOrigins = [
-    "http://localhost:3001/",
+    "http://localhost:3000",
     "http://localhost:3002/",
     // "http://localhost:5175/",
-    "https://https://finmap.onrender.com/",
+    "https://finmapxfrontendx.vercel.app/",
   ];
   
   app.use(
