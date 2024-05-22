@@ -6,7 +6,7 @@ const{acceptEmployee,getAllEmployees,getAllReview, declineEmployee,
       deactivateEmployeeActiveStatus, activateEmployeeActiveStatus,
       getUserTypeEmployees,getInactiveEmployees,
       getAllNews,activateEmployee,getActiveEmployee,
-    }=require('../../controllers/AdminController')
+    }=require('../../controllers/adminController')
 const{SubAdminValidation,ReviewValidation,NewsValidation}=require('./../../validators/index')
 const{ValidateMiddleware}=require('./../../middlewares/index')
 const router = express.Router();
