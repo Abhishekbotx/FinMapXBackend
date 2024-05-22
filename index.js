@@ -42,6 +42,9 @@ app.use(
     })
 )
 app.use(express.json());
+app.get("/", (req, res) => {
+    res.send(`<h1> This is HOMEPAGE baby</h1>`);
+  });
 const prepareAndStartServer = () => {
     app.use('/api', apiRoutes); 
     
