@@ -9,19 +9,19 @@ const signin = async (req, res) => {
         const { email, password } = req.body;
         const response = await adminAuthService.signIn({ email, password });
         console.log('response in controller:', response);
-        
+
         const options = {
             expires: new Date(Date.now() + 500001000),
             httpOnly: true,
-            sameSite: 'none',      
+            sameSite: 'none',
             secure: true
         };
 
-        // Set the JWT token as the value of the cookie
+
         res.cookie('token', response.toString(), options).status(200).json({
             success: true,
             message: 'Admin login successful',
-            // You can include other data if needed
+
         });
     } catch (error) {
         if (error.name === 'ServiceError') {
@@ -46,22 +46,47 @@ const signin = async (req, res) => {
 
 const signout = async (req, res) => {
     try {
-        console.log('Request cookies:',req.cookies.token)
-        // console.log('Request token :',req.token)
-        // const adminId = req.cookies.token.id       
-        console.log('logging before authadminservice');
-        const adminDetails = await adminAuthService.signOut(req.cookies.token)
+        console.log('Request cookies:', req.cookies.token)
         const options = {
+            expires: new Date(Date.now() + 10 * 1000),
             httpOnly: true,
             secure: true,
+            sameSite: "none",
         };
+        // console.log('Request token :',req.token)
+        // const adminId = req.cookies.token.id   
 
-        res.cookie('token', 'none', {
-            expires: new Date(Date.now() + 5 * 1000),
-            httpOnly: true,
-        })
+        /*
+         const options = {
+      expires: new Date(Date.now() + 10 * 1000),
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    };
+
+    return res
+      .status(200)
+      .clearCookie("accessToken", options)
+      .clearCookie("refreshToken", options)
+      .json({
+        success: true,
+        message: "User logged out successfully",
+      });
+        */
+        console.log('logging before authadminservice');
+        const adminDetails = await adminAuthService.signOut(req.cookies.token)
+        // const options = {
+        //     httpOnly: true,
+        //     secure: true,
+        // };
+        return res
+            .status(200)
+            .clearCookie("token", options)
             // .clearCookie("refreshToken", options)
-            .json( "User logged Out");
+            .json({
+                success: true,
+                message: "User logged out successfully",
+            })
     } catch (error) {
         if (error.name === 'ServiceError') {
             return res.status(error.statusCode).json({
@@ -84,28 +109,28 @@ const signout = async (req, res) => {
 
 
 
-const getProfile= async (req, res) => {
+const getProfile = async (req, res) => {
     try {
         const token = req.cookies.token;
-        console.log('token in getprofile controller.js',token);
-        console.log('req.body',req.body)
+        console.log('token in getprofile controller.js', token);
+        console.log('req.body', req.body)
         const response = await adminAuthService.getAdminByToken(token);
 
-         console.log(response)
+        console.log(response)
         res.json({
             success: true,
             message: 'status changed to Active employee successfully',
             data: response
         });
     } catch (error) {
-        if(error.name == 'ServiceError'){
+        if (error.name == 'ServiceError') {
             return res.status(error.statusCode).json({
                 message: error.message,
                 success: false,
                 error: error.explaination,
                 data: {}
             });
-        }else {
+        } else {
             console.error('Error in controller:', error.name);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message || 'Internal Server Error',
@@ -121,7 +146,7 @@ const getProfile= async (req, res) => {
 
 const getAllSubAdmin = async (req, res) => {
     try {
-        
+
         const response = await adminAuthService.getAllSubAdmin();
         return res.status(StatusCodes.CREATED).json({
             message: 'subAdmin created successfully',
@@ -156,7 +181,7 @@ const createSubAdmin = async (req, res) => {
             email,
             password,
             confirmPassword,
-            contactNumber =''
+            contactNumber = ''
         } = req.body
         console.log(req.body)
         if (password !== confirmPassword) {
@@ -172,7 +197,7 @@ const createSubAdmin = async (req, res) => {
             email: email,
             password: password,
             confirmPassword: confirmPassword,
-            contactNumber:contactNumber
+            contactNumber: contactNumber
 
         });
         console.log('subAdmin in controller:', response)
@@ -240,7 +265,7 @@ const deleteSubAdmin = async (req, res) => {
 
 const UpdateDisplayPicture = async (req, res) => {
     try {
-        const token=req.cookies.token
+        const token = req.cookies.token
         const userId = req.cookies.id;
         console.log('userId in updatedisplyer controller:', userId)
         // console.log('Req Files',req.files)
@@ -286,7 +311,7 @@ const UpdateDisplayPicture = async (req, res) => {
 const UpdateProfile = async (req, res) => {
 
     try {
-        const token=req.cookies.token
+        const token = req.cookies.token
 
         if (!req.files || !req.files.Picture) {
             return res.status(StatusCodes.BAD_REQUEST).json({
@@ -300,10 +325,10 @@ const UpdateProfile = async (req, res) => {
         // const DisplayPicture = req.files.Picture
         // console.log('displaypicture:', DisplayPicture)
         // console.log('Req Files',req.files)
-        const data=req.body
+        const data = req.body
         const image = req.files.Picture
         console.log('displaypicture:', image)
-        const response = await adminAuthService.updateProfile({...data,image,token});
+        const response = await adminAuthService.updateProfile({ ...data, image, token });
         console.log(response)
         res.status(StatusCodes.OK).json({
             message: 'Profile updated successfully',
@@ -333,4 +358,4 @@ const UpdateProfile = async (req, res) => {
 
 
 
-module.exports = { getAllSubAdmin,createSubAdmin, deleteSubAdmin, signin,signout,getProfile,UpdateProfile, UpdateDisplayPicture }
+module.exports = { getAllSubAdmin, createSubAdmin, deleteSubAdmin, signin, signout, getProfile, UpdateProfile, UpdateDisplayPicture }

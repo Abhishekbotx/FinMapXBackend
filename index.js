@@ -7,6 +7,58 @@ const cors = require('cors')
 const app = express(); 
 const path = require('path');
 // const cloudinary=require('./src/config/cloudinaryConfig')
+
+
+
+
+const allowedOrigins = [
+    "http://localhost:3001/",
+    "http://localhost:3002/",
+    // "http://localhost:5175/",
+    "https://https://finmap.onrender.com/",
+  ];
+  
+  app.use(
+    cors({
+      origin: allowedOrigins,
+      credentials: true,
+      methods: ["GET", "POST", "PUT", "DELETE"],
+    })
+  );
+  
+  // session
+//   app.use(
+//     session({
+//       secret: "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",
+//       resave: false,
+//       saveUninitialized: false,
+//       cookie: {
+//         maxAge: 30 * 24 * 60 * 60 * 1000,
+//         secure: true, // set to true if your using https
+//         sameSite: "none", // set to none if your using https
+//         httpOnly: true, // set to true if your using https
+//       },
+//     })
+//   );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.use(cors(
     {
         origin:'http://localhost:3000',
