@@ -205,7 +205,8 @@ class AdminService {
     async updateReview(data) {
         try {
             // const { reviewId, name, profession, review, rating, reviewPicture } = data
-            const { reviewId, name, profession, review } = data
+            const { reviewId, fullName, profession, review } = data
+            console.log('name:',name)
             // const uploadPath = __dirname + "./../utils/uploads/reviewImage";
             console.log('beforefileupload')
             // const filePath = await uploadFile(reviewPicture, uploadPath);
@@ -219,7 +220,7 @@ class AdminService {
 
             // const reviewImage = filePath
             const reviewDetails = await Review.findById(reviewId)
-            reviewDetails.name = name
+            reviewDetails.name = fullName
             reviewDetails.profession = profession,
             reviewDetails.review = review,
             reviewDetails.save()

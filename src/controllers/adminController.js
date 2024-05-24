@@ -406,7 +406,7 @@ const updateReview = async (req, res) => {
         // if (req.files && req.files.Picture) {
         //     data.reviewPicture = req.files.Picture;
         // }
-        const response = await adminService.updateReview({...data});
+        const response = await adminService.updateReview(data);
         res.json({
             success: true,
             message: 'review updated successfully',
