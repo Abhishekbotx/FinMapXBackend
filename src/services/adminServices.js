@@ -219,7 +219,7 @@ class AdminService {
             // }
 
             // const reviewImage = filePath
-            const reviewDetails = await adminRepository.findReviewById(reviewId)
+            const reviewDetails = await Review.findOne({_id:reviewId})
             console.log('reviewdetails:',reviewDetails)
             reviewDetails.name = fullName
             reviewDetails.profession = profession

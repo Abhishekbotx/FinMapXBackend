@@ -93,7 +93,7 @@ router.post(
     '/Admin/deleteReview',isAuthenticatedMid, deleteReview
     
 );
-router.post( 
+router.put( 
     '/Admin/updateReview',isAuthenticatedMid,ValidateMiddleware(UpdateReviewValidation), updateReview
     
 );
