@@ -406,6 +406,7 @@ const updateReview = async (req, res) => {
         // if (req.files && req.files.Picture) {
         //     data.reviewPicture = req.files.Picture;
         // }
+        console.log('reb body review id check:',req.body)
         const response = await adminService.updateReview(data);
         res.json({
             success: true,
