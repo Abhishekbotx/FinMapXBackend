@@ -36,6 +36,12 @@ const reviewSchema=z.object({
     .min(10,{message:'review must be minimum of 10 characters'})
     .max(200,{message:'review must be maximum of 200 characters'}),
 
+    reviewId:z.
+    string({required_error:"reviewId is required"})
+    .trim()
+    .min(10,{message:'review must be minimum of 10 characters'})
+    .max(200,{message:'review must be maximum of 200 characters'}),
+
 
 })
 
