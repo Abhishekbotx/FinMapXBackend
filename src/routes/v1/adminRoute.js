@@ -7,7 +7,7 @@ const{acceptEmployee,getAllEmployees,getAllReview, declineEmployee,
       getUserTypeEmployees,getInactiveEmployees,
       getAllNews,activateEmployee,getActiveEmployee,
     }=require('../../controllers/adminController')
-const{SubAdminValidation,ReviewValidation,NewsValidation}=require('./../../validators/index')
+const{SubAdminValidation,ReviewValidation,NewsValidation, UpdateReviewValidation}=require('./../../validators/index')
 const{ValidateMiddleware}=require('./../../middlewares/index')
 const router = express.Router();
 
@@ -94,7 +94,7 @@ router.post(
     
 );
 router.put( 
-    '/Admin/updateReview',isAuthenticatedMid,ValidateMiddleware(ReviewValidation), updateReview
+    '/Admin/updateReview',isAuthenticatedMid,ValidateMiddleware(UpdateReviewValidation), updateReview
     
 );
 

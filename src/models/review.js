@@ -1,4 +1,5 @@
 const mongoose=require('mongoose')
+const { required } = require('../validators/reviewValidation')
 const reviewSchema=new mongoose.Schema({
 name:{
     type:String,
@@ -21,6 +22,10 @@ rating:{
 image:{
     type: String,
     required:true
+},
+number:{
+    type: Number,
+
 }
 }, {
     timestamps: true 
