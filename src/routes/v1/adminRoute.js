@@ -90,7 +90,7 @@ router.post(
      
 );     
 router.post(
-    '/Admin/deleteReview',isAuthenticatedMid,isAdmin, deleteReview
+    '/Admin/deleteReview', deleteReview
     
 );
 router.put( 
