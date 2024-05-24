@@ -242,10 +242,10 @@ class AdminService {
             throw error;
         }
     }
-    async deleteReview(reviewId) {
+    async deleteReview(data) {
         try {
 
-            const Review = await adminRepository.deleteReview(reviewId);
+            const Review = await adminRepository.deleteReview(data.reviewId);
             return Review
 
         } catch (error) {
