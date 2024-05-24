@@ -375,11 +375,11 @@ const deleteReview = async (req, res) => {
         const {reviewId} = req.body;
         console.log('reviewId',reviewId)
         const response = await adminService.deleteReview(reviewId);
-        console.log('after response in controller')
+        // console.log('after response in controller')
         res.json({
             success: true,
             message: 'review deleted successfully',
-            data: response
+            // data: response
         });
     } catch (error) {
         if(error.name == 'ServiceError'){
@@ -528,17 +528,17 @@ const deleteNews = async (req, res) => {
         const {newsId} = req.body;
         console.log('newsId',newsId)
         const response = await adminService.deleteNews(newsId);
-        console.log('after response in controller:',response)
-        if(!response){
-            res.json({
-                message:"no news was deleted",
-                success:false
-            })
-        }
+        // console.log('after response in controller:',response)
+        // if(!response){
+        //     res.json({
+        //         message:"no news was deleted",
+        //         success:false
+        //     })
+        // }
         res.json({
             success: true,
             message: 'review deleted successfully',
-            data: response
+            // data: response
         });
     } catch (error) {
         if (error.name === 'DeletNewsError') {

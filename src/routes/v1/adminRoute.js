@@ -108,7 +108,7 @@ router.post(
 );
 router.post(
     '/Admin/deleteNews',isAuthenticatedMid, deleteNews
-    
+     
 );
 
 module.exports = router;

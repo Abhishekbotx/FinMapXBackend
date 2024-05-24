@@ -233,7 +233,7 @@ const deleteSubAdmin = async (req, res) => {
         //   console.log('Req Body:',req.body)
         //   console.log('USERID:',userId)
         const response = await adminAuthService.deleteSubAdmin(userId);
-        console.log('subAdmin in controller:',)
+        // console.log('subAdmin in controller:',)
         return res.status(StatusCodes.CREATED).json({
             message: 'subAdmin deleted successfully',
             success: true,

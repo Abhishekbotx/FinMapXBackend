@@ -70,20 +70,21 @@ const isAdmin = async(req, res, next) => {
     const adminToken = adminDetails.token
     const hasAdminRole = adminDetails.accountType
     if (adminToken !== req.admin.token) {
-        throw new ServiceError(
-            'Token Tampered',
-            ' token unautorized.',
-            StatusCodes.UNAUTHORIZED
-        );
+        return res.status(StatusCodes.UNAUTHORIZED).json({
+            message: 'token Tampered',
+            success: false,
+            error: 'Only admins are allowed to access this resource',
+            data: {}
+        });
     }
 
-    if(adminDetails.active!=='active'){
-        throw new ServiceError(
-            'Employee Inactive',
-            ' Employee is Inactive ,contact Admin .',
-            StatusCodes.UNAUTHORIZED
-        );
-    } 
+    // if(adminDetails.active!=='active'){
+    //     throw new ServiceError(
+    //         'Employee Inactive',
+    //         ' Employee is Inactive ,contact Admin .',
+    //         StatusCodes.UNAUTHORIZED
+    //     );
+    // } 
 
     if (hasAdminRole === 'Admin') {
         console.log('User is an Admin')

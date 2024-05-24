@@ -49,14 +49,16 @@ class adminRepository {
   }
   async deleteReview(reviewId) {
     try {
-      const review = await Review.deleteOne({ _id: reviewId })
-      return review
+      // return await Admin.findByIdAndDelete(userId);
+       await Review.findByIdAndDelete(reviewId)
+     
     } catch (error) {
+      console.error("Error occurred while deleting user in repository layer:", error);
       throw new AppError(
-        'CreateReviewError',
-        'Error occurred while creating review',
-        error.message,
-        StatusCodes.INTERNAL_SERVER_ERROR
+          'DeleteReviewError',
+          'Error occurred while deleting review',
+          error.message,
+          StatusCodes.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -88,10 +90,10 @@ class adminRepository {
   }
   async deleteNews(newsId) {
     try {
-      console.log(newsId)
-      const news = await News.findOneAndDelete({ _id: newsId })
-      console.log('news in repo layer:', news);
-      return news
+      // console.log(newsId)
+      return await News.findOneAndDelete({ _id: newsId })
+      // console.log('news in repo layer:', news);
+      // return news
     } catch (error) {
       throw new AppError(
         'DeletNewsError',
