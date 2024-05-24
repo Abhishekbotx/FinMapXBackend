@@ -19,7 +19,8 @@ class adminRepository {
   }
   async findReviewById(reviewId) {
     try {
-      const review = await Review.find({_id:reviewId})
+      // const user = await Admin.findOne({email:email});
+      const review = await Review.findOne({_id:reviewId})
       console.log('review in repo',review)
       return review
     } catch (error) {

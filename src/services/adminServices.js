@@ -220,6 +220,13 @@ class AdminService {
 
             // const reviewImage = filePath
             const reviewDetails = await adminRepository.findReviewById(reviewId)
+            if(!reviewDetails){
+                throw new ServiceError(
+                    'No review Error',
+                    'Unable to fetch review ',
+                    StatusCodes.BAD_REQUEST
+                )
+            }
             console.log('reviewdetails:',reviewDetails)
             reviewDetails.name = fullName
             reviewDetails.profession = profession
