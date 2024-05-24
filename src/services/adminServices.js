@@ -7,7 +7,7 @@ const mailsender = require('../utils/nodemailer')
 const { employeeDeclined } = require('../mail/employeeDeclined')
 const { Review } = require('../models/index')
 const { uploadFile } = require('../utils/fileupload')
-const {EmployeeRepository}=require('./../repository/index')
+const { EmployeeRepository } = require('./../repository/index')
 const news = require('../models/news')
 const createMulterInstance = require('../utils/multer')
 const employeeRepository = new EmployeeRepository
@@ -30,7 +30,7 @@ class AdminService {
         }
     }
 
-    async getUserEmployeee(){
+    async getUserEmployeee() {
         try {
             const employees = await employeeRepository.getAllUserTypeEmployeees();
             if (!employees) {
@@ -46,7 +46,7 @@ class AdminService {
             throw error
         }
     }
-    async getActiveEmployees(){
+    async getActiveEmployees() {
         try {
             const employees = await employeeRepository.getActiveEmployees();
             if (!employees) {
@@ -62,7 +62,7 @@ class AdminService {
             throw error
         }
     }
-    async getInactiveEmployees(){
+    async getInactiveEmployees() {
         try {
             const employees = await employeeRepository.getInactiveEmployees();
             if (!employees) {
@@ -79,12 +79,12 @@ class AdminService {
         }
     }
 
-    async activateEmployeeActiveStatus(userId){
+    async activateEmployeeActiveStatus(userId) {
         try {
-            console.log('fetching user in adminservice:',userId)
+            console.log('fetching user in adminservice:', userId)
             const employee = await employeeRepository.getUserById(userId);
-            const dateOfJoining=new Date();
-            console.log('employee:',employee)
+            const dateOfJoining = new Date();
+            console.log('employee:', employee)
             if (!employee) {
                 throw new ServiceError(
                     'No user Found',
@@ -92,8 +92,8 @@ class AdminService {
                     StatusCodes.UNAUTHORIZED
                 );
             }
-            employee.active='active'
-            employee.dateOfJoining=dateOfJoining.toLocaleDateString()
+            employee.active = 'active'
+            employee.dateOfJoining = dateOfJoining.toLocaleDateString()
             await employee.save()
             return 'Employee status changed to InActive successfully'
         } catch (error) {
@@ -101,11 +101,11 @@ class AdminService {
             throw error
         }
     }
-    async deactivateEmployeeActiveStatus(userId){
+    async deactivateEmployeeActiveStatus(userId) {
         try {
-            console.log('fetching user in adminservice:',userId)
+            console.log('fetching user in adminservice:', userId)
             const employee = await employeeRepository.getUserById(userId);
-            console.log('employee:',employee)
+            console.log('employee:', employee)
             if (!employee) {
                 throw new ServiceError(
                     'No user Found',
@@ -113,7 +113,7 @@ class AdminService {
                     StatusCodes.UNAUTHORIZED
                 );
             }
-            employee.active='inActive'
+            employee.active = 'inActive'
             await employee.save()
             return 'Employee status changed to InActive successfully'
         } catch (error) {
@@ -139,12 +139,12 @@ class AdminService {
             }
             if (userDetails.accountType == 'User') {
                 userDetails.accountType = 'Employee';
-                userDetails.active= 'active'
+                userDetails.active = 'active'
                 mailsender(email, 'User changed to employee successfully', employeeAccepted(fullName, email))
-                await userDetails.save(); 
-                return userDetails.accountType; 
+                await userDetails.save();
+                return userDetails.accountType;
             } else {
-                return 'AlreadyEmployee'; 
+                return 'AlreadyEmployee';
             }
         } catch (error) {
             console.log('error in addAsEmployee adminservice:', error);
@@ -165,8 +165,8 @@ class AdminService {
     async getReviews() {
         try {
 
-            const Reviews =await  adminRepository.getAllReviews()
-            console.log('reviews in services',Reviews)
+            const Reviews = await adminRepository.getAllReviews()
+            console.log('reviews in services', Reviews)
             return Reviews
 
         } catch (error) {
@@ -175,7 +175,7 @@ class AdminService {
         }
     }
 
-    
+
     async addReview({ name, profession, review, rating, reviewPicture }) {
         try {
 
@@ -183,7 +183,7 @@ class AdminService {
             console.log('beforefileupload')
             // const filePath=await createMulterInstance('../../public/uploads/reviewImage')
             const filePath = await uploadFile(reviewPicture, 'reviewImage');
-            if(!filePath){
+            if (!filePath) {
                 throw new ServiceError(
                     'imageUpload Error',
                     'Unable to upload image',
@@ -191,8 +191,8 @@ class AdminService {
                 )
             }
             // console.log('Image in services:',Image)
-            const reviewImage =filePath
-            const Review =await adminRepository.addReview({
+            const reviewImage = filePath
+            const Review = await adminRepository.addReview({
                 name, profession, review, rating, image: reviewImage
             });
             return Review
@@ -202,39 +202,27 @@ class AdminService {
             throw error;
         }
     }
-    async deleteReview(reviewId) {
-        try {
-
-            const Review =await adminRepository.deleteReview(reviewId);
-            return Review
-
-        } catch (error) {
-            console.log('error in addAsEmployee adminservice:', error);
-            throw error;
-        }
-    }
     async updateReview(data) {
         try {
-            const { reviewId, name, profession, review, rating, reviewPicture } = data
-            const uploadPath = __dirname + "./../utils/uploads/reviewImage";
+            // const { reviewId, name, profession, review, rating, reviewPicture } = data
+            const { reviewId, name, profession, review } = data
+            // const uploadPath = __dirname + "./../utils/uploads/reviewImage";
             console.log('beforefileupload')
-            const filePath = await uploadFile(reviewPicture, uploadPath);
-            if(!filePath){
-                throw new ServiceError(
-                    'imageUpload Error',
-                    'Unable to upload image',
-                    StatusCodes.BAD_REQUEST
-                )
-            }
+            // const filePath = await uploadFile(reviewPicture, uploadPath);
+            // if(!filePath){
+            //     throw new ServiceError(
+            //         'imageUpload Error',
+            //         'Unable to upload image',
+            //         StatusCodes.BAD_REQUEST
+            //     )
+            // }
 
-            const reviewImage = filePath
+            // const reviewImage = filePath
             const reviewDetails = await Review.findById(reviewId)
             reviewDetails.name = name
             reviewDetails.profession = profession,
-                reviewDetails.review = review,
-                reviewDetails.image = reviewImage,
-                reviewDetails.rating = rating,
-                reviewDetails.save()
+            reviewDetails.review = review,
+            reviewDetails.save()
 
             // const Review = adminRepository.updateReview();
             return reviewDetails
@@ -244,6 +232,18 @@ class AdminService {
             throw error;
         }
     }
+    async deleteReview(reviewId) {
+        try {
+
+            const Review = await adminRepository.deleteReview(reviewId);
+            return Review
+
+        } catch (error) {
+            console.log('error in addAsEmployee adminservice:', error);
+            throw error;
+        }
+    }
+
 
     async getNews() {
         try {
@@ -257,27 +257,27 @@ class AdminService {
         }
     }
 
-    async createNews({ newsImage,editorImage,editorName,newsName,description,newsDate }) {
+    async createNews({ newsImage, editorImage, editorName, newsName, description, newsDate }) {
 
         try {
 
             const newsImagefilePath = await uploadFile(newsImage, 'newsImage');
-            if(!newsImagefilePath){
+            if (!newsImagefilePath) {
                 throw new ServiceError(
                     'newsImageUpload Error',
                     'Unable to upload newsImage',
                     StatusCodes.BAD_REQUEST
                 )
             }
-            
-            const newsPicture=newsImagefilePath
+
+            const newsPicture = newsImagefilePath
 
 
             const editorImagefilePath = await uploadFile(editorImage, 'editorImages');
-            const editorPicture=editorImagefilePath
+            const editorPicture = editorImagefilePath
             // console.log('beforefileupload')
             // const editorfilePath = await uploadFile(editorImage, editoruploadPath);
-            if(!editorImagefilePath){
+            if (!editorImagefilePath) {
                 throw new ServiceError(
                     'editorImageUpload Error',
                     'Unable to upload editorImage',
@@ -285,9 +285,9 @@ class AdminService {
                 )
             }
             // console.log('Image in services:',Image)
-            const News =await  adminRepository.addNews({
-                editorName, newsName, description, newsImage:newsPicture, 
-                editorImage: editorPicture,newsDate:newsDate
+            const News = await adminRepository.addNews({
+                editorName, newsName, description, newsImage: newsPicture,
+                editorImage: editorPicture, newsDate: newsDate
             });
             return News
 
@@ -299,7 +299,7 @@ class AdminService {
 
     async deleteNews(newsId) {
         try {
-            console.log('newsId in service layer:',newsId)
+            console.log('newsId in service layer:', newsId)
             const NewsId = adminRepository.deleteNews(newsId);
             return NewsId
 
