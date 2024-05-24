@@ -18,7 +18,7 @@ const reviewSchema=z.object({
    
 
 
-    name:z.
+    fullName:z.
     string({required_error:"name is required"})
     .trim()
     .min(3,{message:'name must be minimum of 3 characters'})
