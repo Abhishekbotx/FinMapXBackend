@@ -78,7 +78,7 @@ router.get(
     '/Admin/getActiveEmployee',isAuthenticatedMid,isAdmin,getActiveEmployee
 )
 router.get(
-    '/Admin/getAllReview',isAuthenticatedMid, getAllReview
+    '/Admin/getAllReview', getAllReview
      
 );
 router.get(
@@ -93,7 +93,7 @@ router.post(
     '/Admin/deleteReview',isAuthenticatedMid, deleteReview
     
 );
-router.put( 
+router.post( 
     '/Admin/updateReview',isAuthenticatedMid,ValidateMiddleware(UpdateReviewValidation), updateReview
     
 );
