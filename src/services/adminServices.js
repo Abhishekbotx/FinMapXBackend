@@ -227,6 +227,7 @@ class AdminService {
             // reviewDetails.save()
 
             // const Review = adminRepository.updateReview();
+            await reviewDetails.save();
             return reviewDetails
 
         } catch (error) {
