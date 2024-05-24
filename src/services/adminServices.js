@@ -222,9 +222,9 @@ class AdminService {
             const reviewDetails = await adminRepository.findReviewById(reviewId)
             console.log('reviewdetails:',reviewDetails)
             reviewDetails.name = fullName
-            reviewDetails.profession = profession,
-            reviewDetails.review = review,
-            reviewDetails.save()
+            reviewDetails.profession = profession
+            reviewDetails.review = review
+            // reviewDetails.save()
 
             // const Review = adminRepository.updateReview();
             return reviewDetails
