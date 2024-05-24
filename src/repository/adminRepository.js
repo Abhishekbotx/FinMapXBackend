@@ -17,6 +17,22 @@ class adminRepository {
       );
     }
   }
+  async findReviewById(reviewId) {
+    try {
+      const review = await Review.find({_id:reviewId})
+      console.log('review in repo',review)
+      return review
+    } catch (error) {
+      throw new AppError(
+        'CreateNewsError',
+        'Error occurred while creating News',
+        error.message,
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+
   async addReview(data) {
     try {
       const review = await Review.create({ ...data })
