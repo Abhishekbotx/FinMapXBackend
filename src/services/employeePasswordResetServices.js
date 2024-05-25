@@ -29,7 +29,7 @@ class resetPasswordService{
 
             const url = `https:/finmapxfront.vercel.app/employee-forgot-password/reset-password/${token}`;
             console.log(url)
-            const message = mailSend(
+            const message = await mailSend(
                 email,
                 "Password Reset",
                 resetPasswordTemplate(url)
