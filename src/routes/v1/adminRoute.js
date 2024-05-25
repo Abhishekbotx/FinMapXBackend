@@ -1,6 +1,6 @@
 const express = require('express');
 const{isAuthenticatedMid,isAdmin}=require('./../../middlewares/authAdmin')
-const {signin,createSubAdmin,getAllSubAdmin,UpdateDisplayPicture, deleteSubAdmin, signout, getProfile, UpdateProfile}=require('../../controllers/adminAuthController')
+const {signin,forgetPasswordAdmin,verifyOtp,createSubAdmin,getAllSubAdmin,UpdateDisplayPicture, deleteSubAdmin, signout, getProfile, UpdateProfile}=require('../../controllers/adminAuthController')
 const{acceptEmployee,getAllEmployees,getAllReview, declineEmployee,
      addReview, deleteReview,updateReview, createNews, deleteNews,
       deactivateEmployeeActiveStatus, activateEmployeeActiveStatus,
@@ -18,6 +18,14 @@ router.post(
 );
 router.post(     
     '/AdminLogout',isAuthenticatedMid, signout
+    
+);
+router.post(     
+    '/Admin/forgetPasswordOtp', forgetPasswordAdmin
+    
+);
+router.post(     
+    '/Admin/verifyOtp', verifyOtp
     
 );
 router.post(

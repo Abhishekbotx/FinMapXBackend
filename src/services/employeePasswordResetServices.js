@@ -4,7 +4,8 @@ const{EmployeeRepository}=require('../repository/index')
 const mailSend=require('../utils/nodemailer')
 const {ServiceError}=require('../utils/errors/index');
 const mailsender = require('../utils/nodemailer');
-const {passwordUpdated}=require('../mail/passwordUpdate')
+const {passwordUpdated}=require('../mail/passwordUpdate');
+const resetPasswordTemplate = require('../mail/resetPassword');
 const employeeRepository=new EmployeeRepository()
 class resetPasswordService{
     async resetPasswordToken({email}) {
@@ -26,12 +27,12 @@ class resetPasswordService{
             await userDetails.save();
             console.log(userDetails)
 
-            const url = `http://localhost:3000/update-password/${token}`;
+            const url = `https:/finmapxfront.vercel.app/employee-forgot-password/reset-password/${token}`;
             console.log(url)
             const message = mailSend(
                 email,
                 "Password Reset",
-                `Your password reset link is ${url}. Please click this link to reset your password.`
+                resetPasswordTemplate(url)
             );
             // console.log(message)
             return { success: true, message: "Email sent successfully. Please check your email to continue.",messageResponse:message.response };

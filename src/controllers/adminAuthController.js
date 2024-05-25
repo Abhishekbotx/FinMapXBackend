@@ -42,6 +42,83 @@ const signin = async (req, res) => {
         }
     }
 }
+const forgetPasswordAdmin = async (req, res) => {
+    try {
+        const { email} = req.body;
+        const response = await adminAuthService.forgetPasswordAdmin(email);
+        console.log('response in controller:', response);
+
+        // const options = {
+        //     expires: new Date(Date.now() + 500001000),
+        //     httpOnly: true,
+        //     sameSite: 'none',
+        //     secure: true
+        // };
+
+
+        res.cookie('token', response.toString()).status(200).json({
+            success: true,
+            message: 'Admin login successful',
+
+        });
+    } catch (error) {
+        if (error.name === 'ServiceError') {
+            return res.status(error.statusCode).json({
+                message: error.message,
+                success: false,
+                error: error.explanation,
+                data: {}
+            });
+        } else {
+            console.error('Error in controller:', error);
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message || 'Internal Server Error',
+                success: false,
+                error: error.explanation || 'Unknown error occurred',
+                data: {}
+            });
+        }
+    }
+}
+const verifyOtp = async (req, res) => {
+    try {
+        const { otp} = req.body;
+        const response = await adminAuthService.verifyOtp(otp);
+        
+        console.log('response in controller:', response);
+
+        // const options = {
+        //     expires: new Date(Date.now() + 500001000),
+        //     httpOnly: true,
+        //     sameSite: 'none',
+        //     secure: true
+        // };
+
+
+        res.cookie('token', response.toString()).status(200).json({
+            success: true,
+            message: 'otp verification successful',
+
+        });
+    } catch (error) {
+        if (error.name === 'ServiceError') {
+            return res.status(error.statusCode).json({
+                message: error.message,
+                success: false,
+                error: error.explanation,
+                data: {}
+            });
+        } else {
+            console.error('Error in controller:', error);
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message || 'Internal Server Error',
+                success: false,
+                error: error.explanation || 'Unknown error occurred',
+                data: {}
+            });
+        }
+    }
+}
 
 
 const signout = async (req, res) => {
@@ -358,4 +435,4 @@ const UpdateProfile = async (req, res) => {
 
 
 
-module.exports = { getAllSubAdmin, createSubAdmin, deleteSubAdmin, signin, signout, getProfile, UpdateProfile, UpdateDisplayPicture }
+module.exports = { getAllSubAdmin, createSubAdmin,verifyOtp, deleteSubAdmin,forgetPasswordAdmin, signin, signout, getProfile, UpdateProfile, UpdateDisplayPicture }
