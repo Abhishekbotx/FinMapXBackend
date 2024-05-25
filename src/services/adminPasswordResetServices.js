@@ -1,14 +1,17 @@
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const{AdminRepository}=require('../repository/index')
+const{AdminRepository, AdminAuthRepository}=require('../repository/index')
 const mailSend=require('../utils/nodemailer')
-const {ServiceError}=require('../utils/errors/index')
+const {ServiceError}=require('../utils/errors/index');
+const resetPasswordTemplate = require('../mail/resetPassword');
 const adminRepository=new AdminRepository()
+const adminAuthRepository=new AdminAuthRepository()
+
 
 class resetPasswordService{
     async resetPasswordToken({email}) {
         try {
-            const adminDetails = await adminRepository.getAdminByEmail(email);
+            const adminDetails = await adminAuthRepository.getAdminByEmail(email);
             console.log("userdetails:",adminDetails)
             if (!userDetails) {
                 throw new ServiceError(
@@ -25,12 +28,13 @@ class resetPasswordService{
             await adminDetails.save();
             console.log(adminDetails)
 
-            const url = `https://finmapxfront.vercel.app/forgot-password/update-password/${token}`;
+            const url = `https://finmapxfront.vercel.app/privatezxl-forgot-password/reset-password/${token}`;
             console.log(url)
             const message =await mailSend(
                 email,
-                "Password Reset",
-                `Your password reset link is ${url}. Please click this link to reset your password.`
+                "Password Reset Url",
+                resetPasswordTemplate(url)
+                
             );
             // console.log(message)
             return { success: true, message: "Email sent successfully. Please check your email to continue.",messageResponse:message.response };
@@ -58,7 +62,7 @@ class resetPasswordService{
                 );
             }
 
-            const adminDetails = await adminRepository.findByToken(token);
+            const adminDetails = await adminAuthRepository.getAdminByToken(token);
             if (!userDetails) {
                 throw new ServiceError(
                     'Invalid Token',
@@ -89,7 +93,7 @@ class resetPasswordService{
     async updatePassword(data) {
         try {
             const { oldPassword,newPassword,confirmNewPassword,userId } = data;
-            const adminDetails=await adminRepository.getAdminById(userId)
+            const adminDetails=await adminAuthRepository.getAdminById(userId)
             const passwordCheck=bcrypt.compare(oldPassword,userDetails.password)
 
             if(!passwordCheck){

@@ -1,6 +1,6 @@
 const express = require('express');
 const{isAuthenticatedMid,isAdmin}=require('./../../middlewares/authAdmin')
-const {signin,forgetPasswordAdmin,verifyOtp,createSubAdmin,getAllSubAdmin,UpdateDisplayPicture, deleteSubAdmin, signout, getProfile, UpdateProfile}=require('../../controllers/adminAuthController')
+const {signin,forgetPassword,verifyOtp,createSubAdmin,getAllSubAdmin,UpdateDisplayPicture, deleteSubAdmin, signout, getProfile, UpdateProfile}=require('../../controllers/adminAuthController')
 const{acceptEmployee,getAllEmployees,getAllReview, declineEmployee,
      addReview, deleteReview,updateReview, createNews, deleteNews,
       deactivateEmployeeActiveStatus, activateEmployeeActiveStatus,
@@ -8,7 +8,8 @@ const{acceptEmployee,getAllEmployees,getAllReview, declineEmployee,
       getAllNews,activateEmployee,getActiveEmployee,
     }=require('../../controllers/adminController')
 const{SubAdminValidation,ReviewValidation,NewsValidation, UpdateReviewValidation}=require('./../../validators/index')
-const{ValidateMiddleware}=require('./../../middlewares/index')
+const{ValidateMiddleware}=require('./../../middlewares/index');
+const { resetPasswordToken, resetPassword } = require('../../controllers/adminPasswordResetController');
 const router = express.Router();
 
 
@@ -20,10 +21,16 @@ router.post(
     '/AdminLogout',isAuthenticatedMid, signout
     
 );
-router.post(     
-    '/Admin/forgetPasswordOtp', forgetPasswordAdmin
+router.post(
+    '/Admin/forgetPassword', resetPasswordToken
     
 );
+
+router.post(
+    '/Admin/resetPassword/:token', 
+    resetPassword
+);
+
 router.post(     
     '/Admin/verifyOtp', verifyOtp
     

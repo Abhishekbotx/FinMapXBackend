@@ -42,7 +42,7 @@ const signin = async (req, res) => {
         }
     }
 }
-const forgetPasswordAdmin = async (req, res) => {
+const forgetPassword = async (req, res) => {
     try {
         const { email} = req.body;
         const response = await adminAuthService.forgetPasswordAdmin(email);
@@ -151,7 +151,7 @@ const signout = async (req, res) => {
       });
         */
         console.log('logging before authadminservice');
-        const adminDetails = await adminAuthService.signOut(req.cookies.token)
+        // const adminDetails = await adminAuthService.signOut(req.cookies.token)
         // const options = {
         //     httpOnly: true,
         //     secure: true,
@@ -435,4 +435,4 @@ const UpdateProfile = async (req, res) => {
 
 
 
-module.exports = { getAllSubAdmin, createSubAdmin,verifyOtp, deleteSubAdmin,forgetPasswordAdmin, signin, signout, getProfile, UpdateProfile, UpdateDisplayPicture }
+module.exports = { getAllSubAdmin, createSubAdmin,verifyOtp, deleteSubAdmin,forgetPassword, signin, signout, getProfile, UpdateProfile, UpdateDisplayPicture }

@@ -121,8 +121,8 @@ class AdminAuthService{
             console.log('beforer token generation');
             const token = createToken(payload, ADMIN_JWT_KEY, '1h');
             console.log('after token generation');
-            adminDetails.token =token
-            adminDetails.save()
+            // adminDetails.token =token
+            // adminDetails.save()
 
             // console.log(adminDetails)
             // console.log('before returning token');

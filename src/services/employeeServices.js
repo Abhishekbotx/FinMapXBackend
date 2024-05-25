@@ -105,10 +105,9 @@ class UserService {
                     StatusCodes.UNAUTHORIZED
                 );
             }
-            const payload = { email: userDetails.email, id: userDetails._id, }
-            const token = await createToken(payload, JWT_KEY, '1h');
-            userDetails.token = token;
-            await userDetails.save();
+            const payload = { email: userDetails.email, id: userDetails._id,
+                role:userDetails.accountType }
+            const token = await createToken(payload, JWT_KEY, '24h');
 
             console.log(token)
             return token
