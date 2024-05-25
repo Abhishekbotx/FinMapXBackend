@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
-const OTP = require('../models/otp');
+const {OTP} = require('../models/index');
+const otpgenerator = require('otp-generator');
 const {EmployeeRepository,AdminAuthRepository} = require('../repository/index');
 const { ServiceError, ValidationError, ClientError } = require('../utils/errors/index');
 const { ADMIN_JWT_KEY } = require('../config/dotenvConfig');
@@ -126,6 +127,88 @@ class AdminAuthService{
             // console.log(adminDetails)
             // console.log('before returning token');
             return token 
+        } catch (error) {
+            console.error("Something went wrong in the sign-in process:", error);
+            throw error;
+        }
+    } 
+    async forgetPasswordAdmin(email) {
+        try {
+            if(!email ){
+                throw new ServiceError(
+                    'Validation Error',
+                    'enter email  properly.',
+                    StatusCodes.BAD_REQUEST
+                );
+            }
+            console.log('after validation');
+            const adminDetails = await adminAuthRepository.getAdminByEmail(email);
+            if (!adminDetails) {
+                throw new ServiceError(
+                    'Email not registered as Admin or SubAdmin ',
+                    'Email is not registerd as Admin or SubAdmin.',
+                    StatusCodes.UNAUTHORIZED
+                );
+            }
+           
+            let otp = otpgenerator.generate(6, {
+                upperCaseAlphabets: false,
+                lowerCaseAlphabets: false,
+                specialChars: false
+            });
+
+            let result = await OTP.find({ email: email, otp: otp });
+
+            while (result.length > 0) {
+                otp = otpgenerator.generate(6, {
+                    upperCaseAlphabets: false,
+                    lowerCaseAlphabets: false,
+                    specialChars: false
+                });
+                result = await OTP.find({ email: email, otp: otp });
+            }
+            console.log('no result found', result)
+            const payload = {
+                email, otp
+            }
+            const otpBody = await OTP.create(payload)
+            if(!otpBody){
+                throw new ServiceError(
+                    'otp not generated ',
+                    'otp was not generated.',
+                    StatusCodes.EXPECTATION_FAILED
+                );
+            }
+
+            return 'otp generated successfully'
+
+
+            // console.log(adminDetails)
+            // console.log('before returning token');
+            return token 
+        } catch (error) {
+            console.error("Something went wrong in the sign-in process:", error);
+            throw error;
+        }
+    } 
+    async verifyOtp(otp,email) {
+        try {
+            
+            const response = await OTP.findOne({otp:otp,email:email});
+            if (!verifyOtp) {
+                throw new ServiceError(
+                    'Invalid otp',
+                    'Otp is invalid.',
+                    StatusCodes.UNAUTHORIZED
+                );
+            }
+            
+            return 'otp verified'
+            
+
+            // console.log(adminDetails)
+            // console.log('before returning token');
+            return 'adminToken reset successful'
         } catch (error) {
             console.error("Something went wrong in the sign-in process:", error);
             throw error;

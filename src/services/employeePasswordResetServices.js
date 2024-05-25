@@ -26,7 +26,7 @@ class resetPasswordService{
             await userDetails.save();
             console.log(userDetails)
 
-            const url = `http://localhost:3000/update-password/${token}`;
+            const url = `https:/finmapxfront.vercel.app/employee-forgot-password/reset-password/${token}`;
             console.log(url)
             const message = mailSend(
                 email,

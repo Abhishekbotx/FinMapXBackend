@@ -6,5 +6,6 @@ module.exports={
     Admin:require('./admin'),
     CustomerProfile:require('./customerProfile'),
     Review:require('./review'),
-    News:require('./news')
+    News:require('./news'),
+    OTP:require('./otp')
 }
