@@ -34,7 +34,7 @@ class resetPasswordService{
                 "Password Reset",
                 resetPasswordTemplate(url)
             );
-            // console.log(message)
+            console.log(message)
             return { success: true, message: "Email sent successfully. Please check your email to continue.",messageResponse:message.response };
         } catch (error) {
             console.error("Error in sending reset password token:", error);
