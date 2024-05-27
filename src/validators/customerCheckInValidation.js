@@ -57,7 +57,7 @@ const customerCheckInSchema=z.object({
     state:z.
     string({required_error:"state is required"})
     .trim()
-    .min(6,{message:'state must be minimum of 6 characters'})
+    .min(3,{message:'state must be minimum of 3 characters'})
     .max(50,{message:'state must be maximum of 50 characters'}),
 
 

@@ -26,7 +26,7 @@ const resetPassword = async (req, res) => {
         throw error
     }
 }
-const forgetPassword = async (req, res) => {
+const forgetPasswordEmployee = async (req, res) => {
     try {
         const resetToken = await resetPasswordService.resetPasswordToken({ email: req.body.email })
         console.log(resetToken);
@@ -74,4 +74,4 @@ const updatePassword = async (req, res) => {
     }
 }
 
-module.exports = { forgetPassword, resetPassword,updatePassword }
+module.exports = { forgetPasswordEmployee, resetPassword,updatePassword }

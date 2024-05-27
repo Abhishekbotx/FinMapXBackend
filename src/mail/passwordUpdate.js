@@ -1,4 +1,4 @@
-exports.passwordUpdated = (email, name) => {
+const passwordUpdated = (email, name) => {
 	return `<!DOCTYPE html>
     <html>
     
@@ -73,3 +73,4 @@ exports.passwordUpdated = (email, name) => {
     
     </html>`;
 };
+module.exports = passwordUpdated;

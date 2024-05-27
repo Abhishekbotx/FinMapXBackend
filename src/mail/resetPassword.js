@@ -1,88 +1,78 @@
-const resetPasswordTemplate = (resetLink) => {
+const newResetPasswordTemplate = (resetLink) => {
     return `<!DOCTYPE html>
     <html>
-    
     <head>
         <meta charset="UTF-8">
-        <title>Reset Password Email</title>
+        <title>Reset Password</title>
         <style>
             body {
-                background-color: #ffffff;
-                font-family: Arial, sans-serif;
-                font-size: 16px;
-                line-height: 1.4;
+                background-color: #f0f3f6;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 color: #333333;
                 margin: 0;
-                padding: 0;
+                padding: 20px;
             }
-    
             .container {
                 max-width: 600px;
                 margin: 0 auto;
                 padding: 20px;
+                background-color: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                 text-align: center;
             }
-    
-            .logo {
-                max-width: 200px;
+            .header img {
+                max-width: 150px;
+            }
+            .header {
                 margin-bottom: 20px;
             }
-    
-            .message {
-                font-size: 18px;
-                font-weight: bold;
-                margin-bottom: 20px;
+            .content h2 {
+                color: #0073aa;
+                font-size: 22px;
             }
-    
-            .body {
+            .content p {
                 font-size: 16px;
-                margin-bottom: 20px;
+                line-height: 1.5;
+                margin: 0 0 20px;
+                text-align: left;
             }
-    
-            .cta {
-                display: inline-block;
-                padding: 10px 20px;
-                background-color: #28a745;
-                color: #ffffff;
-                text-decoration: none;
-                border-radius: 5px;
-                font-size: 16px;
-                font-weight: bold;
-                margin-top: 20px;
-            }
-    
-            .support {
+           
+           .center{
+             text-align: center;
+           }
+            .support-info {
                 font-size: 14px;
-                color: #999999;
+                color: #666666;
                 margin-top: 20px;
             }
-    
-            .highlight {
-                font-weight: bold;
+            .support-info a {
+                color: #0073aa;
             }
         </style>
     </head>
-    
     <body>
         <div class="container">
-            <a href=""><img class="logo"
-                    src="https://res.cloudinary.com/dvtjm1ahg/image/upload/v1715054098/Untitled_design06_xpbkjj.png" alt="FinMap Logo"></a>
-            <div class="message">Reset Your Password</div>
-            <div class="body">
-                <p>Dear User,</p>
-                <p>We received a request to reset your password for your FinMap account. You can reset your password by clicking the button below:</p>
-                <a href="${resetLink}" class="cta">Reset Password</a>
-                <p>If the button above does not work, please copy and paste the following link into your web browser:</p>
-                <p><a href="${resetLink}">${resetLink}</a></p>
-                <p>This link is valid for 30 minutes. If you did not request a password reset, please ignore this email or contact support if you have any questions.</p>
+            <div class="header">
+                <img src="https://res.cloudinary.com/dvtjm1ahg/image/upload/v1715054098/Untitled_design06_xpbkjj.png" alt="FinMap Logo">
             </div>
-            <div class="support">If you have any questions or need assistance, please feel free to reach out to us at <a
-                    href="mailto:finmap@gmail.com">finmap@gmail.com</a>. We are here to help!</div>
+            <div class="content">
+                <h2>Password Reset Request</h2>
+                <p>Hi there,</p>
+                <p>You requested to reset your FinMap account password. Click the button below to reset it:</p>
+                
+                 copy and paste this link into your browser:</p>
+
+                 <p class="center">${resetLink}</p>
+                
+                <p>This link will expire in 30 minutes. If you didn't request this, please ignore this email or contact our support.</p>
+            </div>
+            <div class="support-info">
+                <p>If you need further assistance, please reach out to us at <a href="mailto:finmap@gmail.com">finmap@gmail.com</a>.</p>
+            </div>
         </div>
     </body>
-    
-    </html>`;
-  };
-  
-  module.exports = resetPasswordTemplate;
-  
+    </html>`
+};
+
+module.exports = newResetPasswordTemplate;

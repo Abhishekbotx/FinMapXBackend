@@ -5,13 +5,15 @@ const mailSend=require('../utils/nodemailer')
 const {ServiceError}=require('../utils/errors/index');
 const mailsender = require('../utils/nodemailer');
 const {passwordUpdated}=require('../mail/passwordUpdate');
-const resetPasswordTemplate = require('../mail/resetPassword');
+// const resetPasswordTemplate = require('../mail/resetPassword');
+const otpTemplate = require('../mail/otpVerification');
+const newResetPasswordTemplate = require('../mail/resetPassword');
 const employeeRepository=new EmployeeRepository()
 class resetPasswordService{
-    async resetPasswordToken({email}) {
+    async resetPasswordToken({ email }) {
         try {
             const userDetails = await employeeRepository.getUserByEmail(email);
-            console.log("userdetails:",userDetails)
+            console.log("userdetails:", userDetails)
             if (!userDetails) {
                 throw new ServiceError(
                     'User Not Found',
@@ -19,28 +21,28 @@ class resetPasswordService{
                     404
                 );
             }
-            
-
+    
             const token = crypto.randomBytes(20).toString("hex");
             console.log(token)
             userDetails.token = token;
             await userDetails.save();
             console.log(userDetails)
-
-            const url = `https:/finmapxfront.vercel.app/employee-forgot-password/reset-password/${token}`;
+    
+            const url = `https://finmapxfront.vercel.app/employee-forgot-password/reset-password/${token}`;
             console.log(url)
-            const message = await mailSend(
+            const message = await mailsender(
                 email,
                 "Password Reset",
-                resetPasswordTemplate(url)
+                newResetPasswordTemplate(url)
             );
             console.log(message)
-            return { success: true, message: "Email sent successfully. Please check your email to continue.",messageResponse:message.response };
+            return { success: true, message: "Email sent successfully. Please check your email to continue.", messageResponse: message.response };
         } catch (error) {
             console.error("Error in sending reset password token:", error);
             throw error
         }
-    } 
+    }
+    
 
     async resetPassword(data) {
         try {

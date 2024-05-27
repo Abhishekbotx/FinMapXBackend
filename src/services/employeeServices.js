@@ -118,16 +118,31 @@ class UserService {
     }
     async cutomerCheckInService(data) {
         try {
-
-            const customer = await employeeRepository.addCustomerData(data)
-            return customer
+            const email = await employeeRepository.getUserByEmail(data.email);
+            if (email) {
+                throw new ServiceError(
+                    'Email already stored in db',
+                    'User data is already stored',
+                    StatusCodes.CONFLICT 
+                );
+            } 
+            const customer = await employeeRepository.addCustomerData(data);
+            return customer;
         } catch (error) {
             console.error("Something went wrong in the addEmployees in process:", error);
             throw error;
         }
     }
 
-
+    async userExists(email) {
+        try {
+            const user = await employeeRepository.getUserByEmail(email);
+            
+            return !!user; // Return true if user exists, false otherwise
+        } catch (error) {
+            throw error;
+        }
+    }
     async createOtp(email) {
 
         try {

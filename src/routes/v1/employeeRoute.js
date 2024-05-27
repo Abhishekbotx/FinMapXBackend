@@ -1,7 +1,7 @@
 const express = require('express');
 const{isAuthenticatedMid}=require('./../../middlewares/authEmployee')
-const {signin,signup,generateOtp,cutomerCheckIn} = require('../../controllers/employeeController');
-const {forgetPassword,resetPassword,updatePassword} = require('../../controllers/employeePasswordResetController');
+const {signin,signup,generateOtp,cutomerCheckIn, userExists} = require('../../controllers/employeeController');
+const {forgetPasswordEmployee,resetPassword,updatePassword} = require('../../controllers/employeePasswordResetController');
 const { updateProfile,updateDisplayPicture } = require('../../controllers/employeeProfileController');
 const upload = require('../../utils/fileuploadTest');
 const {EmployeeSignupValidation,CustomerValidation}=require('./../../validators/index')
@@ -36,7 +36,7 @@ router.post(
     resetPassword
 );
 router.post(
-    '/forgetPassword', forgetPassword
+    '/forgetPassword', forgetPasswordEmployee
     
 );
 router.put(
@@ -49,6 +49,10 @@ router.put(
 );
 router.put(
     '/updateDisplayPicture',isAuthenticatedMid, updateDisplayPicture
+          
+);
+router.post(
+    '/checkCustomerExists',isAuthenticatedMid, userExists
     
 );
 router.post(

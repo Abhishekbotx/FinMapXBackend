@@ -56,7 +56,7 @@ class ProfileServices {
     async displayPictureUpdate(userId, displayPicture) {
         try {
             const supportedTypes = ["png", "jpg", "jpeg"];
-            const fileType = await displayPicture.name.split('.').pop().toLowerCase();//extracting filetype
+            const fileType = await displayPicture.name.split('.').pop().toLowerCase();
             console.log(fileType)
             const response = await isFileTypeSupported(fileType, supportedTypes)
             if (!response) {

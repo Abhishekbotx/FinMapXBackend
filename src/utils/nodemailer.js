@@ -11,7 +11,7 @@ const mailsender = async (email, title, body) => {
       });
 
       const info = await transport.sendMail({
-          from: `FINMAP`,
+          from: `FINMAP <noreply@gmail.com>`,
           to:`${email}`,
           subject: `${title}`,
           html: `${body}`,

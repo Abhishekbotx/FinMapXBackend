@@ -24,20 +24,7 @@ const path = require('path');
     })
   );
   
-  // session
-//   app.use(
-//     session({
-//       secret: "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",
-//       resave: false,
-//       saveUninitialized: false,
-//       cookie: {
-//         maxAge: 30 * 24 * 60 * 60 * 1000,
-//         secure: true, // set to true if your using https
-//         sameSite: "none", // set to none if your using https
-//         httpOnly: true, // set to true if your using https
-//       },
-//     })
-//   );
+
 
 
 

@@ -100,39 +100,50 @@ const signin = async (req, res) => {
 
 const cutomerCheckIn = async (req, res) => {
     try {
-        const data= req.body
-        // const adderId=req.userId
-        const adderId=req.employee.id
-        console.log('adderId hai:',req.body.adderId)
-        const response = await employeeService.cutomerCheckInService({
-            ...data,adderId
-        });
-        // console.log({ adder: req.body.adderId, userId: req.body.id });
+        const data = req.body;
+        const adderId = req.employee.id;
+        const response = await employeeService.cutomerCheckInService({ ...data, adderId });
         return res.status(StatusCodes.OK).json({
             message: 'customer checkedIn successfully',
             success: true,
             data: response
         });
     } catch (error) {
-        if (error.name === 'ValidationError') {
+        if (error.name === 'ServiceError') {
             return res.status(error.statusCode).json({
                 message: error.message,
                 success: false,
-                error: error.explanation,
-                data: {}
-            });
-        } else {
-            console.error('Error in controller:', error);
-            const statusCode = error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
-            return res.status(statusCode).json({
-                message: error.message || 'Internal Server Error',
-                success: false,
-                error: error.explanation || 'Unknown error occurred',
+                error: error.explaination,
                 data: {}
             });
         }
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: 'Something went wrong',
+            success: false,
+            error: error.message,
+            data: {}
+        });
     }
-}
+};
+
+const userExists = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const exists = await employeeService.userExists(email);
+        console.log(exists);
+        return res.status(StatusCodes.OK).json({
+            message: 'User exists check completed',
+            success: true,
+            exists
+        });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: 'Something went wrong',
+            success: false,
+            error: error.message
+        });
+    }
+};
 
 
 const generateOtp=async(req,res)=>{
@@ -173,4 +184,4 @@ const generateOtp=async(req,res)=>{
 
 
 
-module.exports = { signup, signin,cutomerCheckIn, generateOtp}
+module.exports = { signup, signin,cutomerCheckIn, generateOtp,userExists}
