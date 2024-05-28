@@ -19,7 +19,8 @@ const path = require('path');
   app.use(
     cors({
       origin: "https://finmapxfront.vercel.app",
-      credentials: true,
+      // origin: "http://localhost:3000",
+      credentials: true, 
       methods: ["GET", "POST", "PUT", "DELETE"],
     })
   );

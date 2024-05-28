@@ -85,6 +85,20 @@ class ProfileServices {
         }
 
     }
+
+    async getEmployee(email) {
+        try {
+            console.log('email in services',email);
+            const employee =await  employeeRepository.getUserByEmail(email)
+            console.log('employee in services',employee)
+            return employee
+
+        } catch (error) {
+            console.log('error in addAsEmployee adminservice:', error);
+            throw error;
+        }
+    }
+
 }
 
 module.exports = ProfileServices;

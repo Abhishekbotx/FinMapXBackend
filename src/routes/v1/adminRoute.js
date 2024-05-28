@@ -1,6 +1,6 @@
 const express = require('express');
 const{isAuthenticatedMid,isAdmin}=require('./../../middlewares/authAdmin')
-const {signin,forgetPassword,verifyOtp,createSubAdmin,getAllSubAdmin,UpdateDisplayPicture, deleteSubAdmin, signout, getProfile, UpdateProfile}=require('../../controllers/adminAuthController')
+const {signin,forgetPassword,verifyOtp,createSubAdmin,getAllSubAdmin,UpdateDisplayPicture, deleteSubAdmin, signout, getProfile, UpdateProfile, updatePassword}=require('../../controllers/adminAuthController')
 const{acceptEmployee,getAllEmployees,getAllReview, declineEmployee,
      addReview, deleteReview,updateReview, createNews, deleteNews,
       deactivateEmployeeActiveStatus, activateEmployeeActiveStatus,
@@ -18,7 +18,7 @@ router.post(
     
 );
 router.post(     
-    '/AdminLogout',isAuthenticatedMid, signout
+    '/AdminLogout', signout
     
 );
 router.post(
@@ -36,61 +36,61 @@ router.post(
     
 );
 router.post(
-    '/Admin/addSubAdmin',isAuthenticatedMid,isAdmin,ValidateMiddleware(SubAdminValidation),createSubAdmin
+    '/Admin/addSubAdmin',ValidateMiddleware(SubAdminValidation),createSubAdmin
     
 ); 
 router.get(
-    '/Admin/getAllSubAdmin',isAuthenticatedMid,isAdmin,getAllSubAdmin
+    '/Admin/getAllSubAdmin',isAdmin,getAllSubAdmin
     
 ); 
 
 router.post(
-    '/Admin/deleteSubAdmin',isAuthenticatedMid,isAdmin, deleteSubAdmin
+    '/Admin/deleteSubAdmin',isAdmin, deleteSubAdmin
       
 );
 router.put(
-    '/Admin/updateDisplayPicture',isAuthenticatedMid,UpdateDisplayPicture
+    '/Admin/updateDisplayPicture',UpdateDisplayPicture
     
 );
 router.put(
-    '/Admin/updateProfile',isAuthenticatedMid,UpdateProfile
+    '/Admin/updateProfile',UpdateProfile
     
 );
 
 router.post(
-    '/Admin/activateEmployeeStatus',isAuthenticatedMid,isAdmin, activateEmployeeActiveStatus
+    '/Admin/activateEmployeeStatus', activateEmployeeActiveStatus
     
 );
 router.post(
-    '/Admin/deactivateEmployeeStatus',isAuthenticatedMid,isAdmin, deactivateEmployeeActiveStatus
+    '/Admin/deactivateEmployeeStatus', deactivateEmployeeActiveStatus
     
 );
 router.post(
-    '/Admin/activateEmployee',isAuthenticatedMid,isAdmin, activateEmployee
+    '/Admin/activateEmployee', activateEmployee
     
 );
 router.post(
-    '/Admin/acceptEmployee',isAuthenticatedMid,isAdmin, acceptEmployee
+    '/Admin/acceptEmployee', acceptEmployee
     
 );
 router.post(
-    '/Admin/declineEmployee',isAuthenticatedMid,isAdmin, declineEmployee
+    '/Admin/declineEmployee', declineEmployee
     
 );
 router.get(
-    '/Admin/getEmployees',isAuthenticatedMid,getAllEmployees
+    '/Admin/getEmployees',getAllEmployees
 )
-router.get(
+router.post(
     '/getAdmin',getProfile
 )
 router.get(
-    '/Admin/getUserEmployee',isAuthenticatedMid,isAdmin,getUserTypeEmployees
+    '/Admin/getUserEmployee',getUserTypeEmployees
 )
 router.get(
-    '/Admin/getInactiveEmployee',isAuthenticatedMid,isAdmin,getInactiveEmployees
+    '/Admin/getInactiveEmployee',getInactiveEmployees
 )
 router.get(
-    '/Admin/getActiveEmployee',isAuthenticatedMid,isAdmin,getActiveEmployee
+    '/Admin/getActiveEmployee',getActiveEmployee
 )
 
 router.get(
@@ -102,7 +102,7 @@ router.get(
           
 );
 router.post(
-    '/Admin/addReview',isAuthenticatedMid,ValidateMiddleware(ReviewValidation), addReview
+    '/Admin/addReview',ValidateMiddleware(ReviewValidation), addReview
      
 );     
 router.post(
@@ -110,7 +110,7 @@ router.post(
     
 );
 router.put( 
-    '/Admin/updateReview',isAuthenticatedMid,ValidateMiddleware(UpdateReviewValidation), updateReview
+    '/Admin/updateReview',ValidateMiddleware(UpdateReviewValidation), updateReview
     
 );
 
@@ -119,11 +119,15 @@ router.get(
     
 );
 router.post(
-    '/Admin/addNews',isAuthenticatedMid,ValidateMiddleware(NewsValidation), createNews
+    '/Admin/addNews',ValidateMiddleware(NewsValidation), createNews
     
 );
 router.post(
-    '/Admin/deleteNews',isAuthenticatedMid, deleteNews
+    '/Admin/deleteNews', deleteNews
+     
+);
+router.post(
+    '/Admin/updatePassword', updatePassword
      
 );
 

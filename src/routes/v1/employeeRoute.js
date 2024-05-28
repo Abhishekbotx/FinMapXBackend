@@ -1,8 +1,8 @@
 const express = require('express');
 const{isAuthenticatedMid}=require('./../../middlewares/authEmployee')
-const {signin,signup,generateOtp,cutomerCheckIn, userExists} = require('../../controllers/employeeController');
+const {signin,signup,generateOtp,cutomerCheckIn, userExists, documentsVerified, loanApproval, loanSanctioned,getAllCustomers, getCustomer} = require('../../controllers/employeeController');
 const {forgetPasswordEmployee,resetPassword,updatePassword} = require('../../controllers/employeePasswordResetController');
-const { updateProfile,updateDisplayPicture } = require('../../controllers/employeeProfileController');
+const { updateProfile,updateDisplayPicture ,getEmployeeProfile} = require('../../controllers/employeeProfileController');
 const upload = require('../../utils/fileuploadTest');
 const {EmployeeSignupValidation,CustomerValidation}=require('./../../validators/index')
 const {ValidateMiddleware}=require('./../..//middlewares/index')
@@ -55,6 +55,31 @@ router.post(
     '/checkCustomerExists',isAuthenticatedMid, userExists
     
 );
+router.post(
+    '/documentsVerify',documentsVerified 
+    
+); 
+router.post(
+    '/loanApproval',loanApproval
+    
+);
+router.post(
+    '/loanSanctioned',loanSanctioned
+    
+);
+router.get(
+    '/getAllCustomers',getAllCustomers
+    
+);
+
+router.post(
+    '/getEmployee',getEmployeeProfile
+)
+router.post(
+    '/getCustomerProfile',getCustomer 
+       
+);
+  
 router.post(
     '/upload',upload
     

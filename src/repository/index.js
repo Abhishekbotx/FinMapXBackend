@@ -3,4 +3,5 @@ module.exports={
     EmployeeProfileRepository:require("./employeeProfileRepository"),
     AdminAuthRepository:require("./adminAuthRepository"),
     AdminRepository:require("./adminRepository"),
+    CustomerRepository:require("./customerRepository"),
 }

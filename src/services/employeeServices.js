@@ -1,15 +1,16 @@
 const bcrypt = require('bcryptjs');
 const otpgenerator = require('otp-generator');
 const OTP = require('../models/otp');
-const {EmployeeRepository} = require('../repository/index');
+const {EmployeeRepository, CustomerRepository} = require('../repository/index');
 const { ServiceError, ValidationError, ClientError } = require('../utils/errors/index');
 const { JWT_KEY } = require('../config/dotenvConfig');
 const { StatusCodes } = require('http-status-codes');
 const validator = require("email-validator");
-const { EmployeeProfile } = require('../models');
+const { EmployeeProfile, CustomerProfile } = require('../models/index');
 const { verifyToken, createToken } = require('../utils/fileAndtoken');
 
 const employeeRepository = new EmployeeRepository();
+const customerRepository = new CustomerRepository();
 
 class UserService {
     async createUser(data) {
@@ -79,8 +80,7 @@ class UserService {
     async signIn(data) {
         try {
             const userDetails = await employeeRepository.getUserByEmail(data.email);
-
-            // console.log('userId', user)
+    
             if (!userDetails) {
                 throw new ServiceError(
                     'Invalid Credentials',
@@ -88,7 +88,16 @@ class UserService {
                     StatusCodes.UNAUTHORIZED
                 );
             }
-            const passwordcheck = await bcrypt.compare(data.password, userDetails.password)
+    
+            if (userDetails.accountType !== 'Employee') {
+                throw new ServiceError(
+                    'Employee role not  assigned ,Contact Admin',
+                    'You are not authorized to access this account.',
+                    StatusCodes.UNAUTHORIZED
+                );
+            }
+    
+            const passwordcheck = await bcrypt.compare(data.password, userDetails.password);
             if (!passwordcheck) {
                 throw new ServiceError(
                     'Password not Matching',
@@ -96,26 +105,30 @@ class UserService {
                     StatusCodes.UNAUTHORIZED
                 );
             }
-
-            const isActive=userDetails.active
-            if(isActive!=='active'){
+    
+            const isActive = userDetails.active;
+            if (isActive !== 'active') {
                 throw new ServiceError(
                     'Profile Inactive',
                     'Your Profile is Inactive, contact admin for setting it active .',
                     StatusCodes.UNAUTHORIZED
                 );
             }
-            const payload = { email: userDetails.email, id: userDetails._id,
-                role:userDetails.accountType }
+    
+            const payload = {
+                email: userDetails.email,
+                id: userDetails._id,
+                role: userDetails.accountType
+            };
             const token = await createToken(payload, JWT_KEY, '24h');
-
-            console.log(token)
-            return token
+    
+            return { success: true, token };
         } catch (error) {
             console.error("Something went wrong in the sign-in process:", error);
-            throw error;
+            return { success: false, message: error.message };
         }
     }
+    
     async cutomerCheckInService(data) {
         try {
             const email = await employeeRepository.getUserByEmail(data.email);
@@ -123,7 +136,7 @@ class UserService {
                 throw new ServiceError(
                     'Email already stored in db',
                     'User data is already stored',
-                    StatusCodes.CONFLICT 
+                    StatusCodes.NOT_FOUND 
                 );
             } 
             const customer = await employeeRepository.addCustomerData(data);
@@ -139,6 +152,79 @@ class UserService {
             const user = await employeeRepository.getUserByEmail(email);
             
             return !!user; // Return true if user exists, false otherwise
+        } catch (error) {
+            throw error;
+        }
+    }
+    async documentsVerify(email) {
+        try {
+            const customer = await customerRepository.findCustomerByEmail(email);
+            if(!customer){
+                throw new ServiceError(
+                    'Email not stored in db',
+                    'email not found in db ',
+                    StatusCodes.NOT_FOUND 
+                );
+            }
+           
+            customer.documentsVerified=!customer.documentsVerified
+            
+            await customer.save()
+            console.log(customer);
+            return 'Documents Verification Status Changed'; 
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+    async loanApprove(email) {
+        try {
+            const customer = await customerRepository.findCustomerByEmail(email);
+            customer.loanApproved=!customer.loanApproved
+            await customer.save()
+            
+            return 'Loan Approval Status Changed'; 
+        } catch (error) {
+            throw error;
+        }
+    }
+    async loanSanctioned(email) {
+        try {
+            const customer = await customerRepository.findCustomerByEmail(email);
+            customer.loanSanctioned=true
+            await customer.save()
+            
+            return 'Loan Sanctioned Successfully'; 
+        } catch (error) {
+            throw error;
+        }
+    }
+    async getAllCustomers() {
+        try {
+            const customer = await customerRepository.getAllCustomers()
+            if(!customer){
+                throw new ServiceError(
+                    'No Customer Found ',
+                    'No Customer Found  db ',
+                    StatusCodes.NOT_FOUND 
+                );
+            }
+            return customer; 
+        } catch (error) {
+            throw error;
+        }
+    }
+    async getCustomer(id) {
+        try {
+            const customer = await customerRepository.getCustomerById(id)
+            if(!customer){
+                throw new ServiceError(
+                    'No Customer Found ',
+                    'No Customer Found  db ',
+                    StatusCodes.NOT_FOUND 
+                );
+            }
+            return customer; 
         } catch (error) {
             throw error;
         }

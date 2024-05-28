@@ -59,32 +59,40 @@ const signup = async (req, res) => {
 
 const signin = async (req, res) => {
     try {
-        const{email,password}=req.body
+        const { email, password } = req.body;
         const response = await employeeService.signIn({
             email: email,
             password: password
         });
-        // console.log(res)
 
         const options = {
-            expires: new Date(Date.now() +  24 * 60 * 60 * 1000),
+            expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
             httpOnly: true,
-          }
-          return res.cookie("token", response, options).status(200).json({
-            success: true,
-            token:response,
-            message: `admin Login Success`,
-          }) 
+        };
+
+        if (response.success) {
+            return res.cookie("token", response.token, options).status(200).json({
+                success: true,
+                token: response.token,
+                message: `Employee Login Success`,
+                user: email
+            });
+        } else {
+            return res.status(401).json({
+                success: false,
+                message: response.message
+            });
+        }
     } catch (error) {
         console.log("Something went wrong in the controller");
-        if(error.name == 'ServiceError'){
+        if (error.name == 'ServiceError') {
             return res.status(error.statusCode).json({
                 message: error.message,
                 success: false,
-                error: error.explaination,
+                error: error.explanation,
                 data: {}
             });
-        }else {
+        } else {
             console.error('Error in controller:', error.name);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message || 'Internal Server Error',
@@ -95,6 +103,7 @@ const signin = async (req, res) => {
         }
     }
 }
+
 
 
 
@@ -179,9 +188,156 @@ const generateOtp=async(req,res)=>{
     }
 }
 
+const documentsVerified=async(req,res)=>{
+    try {
+        // console.log(req.body);
+        
+        const{email}=req.body;
+        
+        const user=await employeeService.documentsVerify(email)
+        
+        // console.log('otpresponse:',otp)
+        return res.json({
+            data:user,
+            message:"otp created successfully"
+        })
+    } catch (error) {
+        if(error.name==='AppError'){
+            return res.status(error.statusCode).json({
+                message: error.message,
+                success: false,
+                error: error.explanation,
+                data: {}
+            });
+        }
+        console.log("Something went wrong in the controller");
+        throw error
+    }
+}
+const loanApproval=async(req,res)=>{
+    try {
+        // console.log(req.body);
+        
+        const{email}=req.body;
+        
+        const user=await employeeService.loanApprove(email)
+        
+        // console.log('otpresponse:',user)
+        return res.json({
+            data:user,
+            message:"loan approval status  changed successfully"
+        })
+    } catch (error) {
+        if(error.name==='AppError'){
+            return res.status(error.statusCode).json({
+                message: error.message,
+                success: false,
+                error: error.explanation,
+                data: {}
+            });
+        }
+        console.log("Something went wrong in the controller");
+        throw error
+    }
+}
+const loanSanctioned=async(req,res)=>{
+    try {
+        // console.log(req.body);
+        
+        const{email}=req.body;
+        
+        const user=await employeeService.loanSanctioned(email)
+        
+        // console.log('otpresponse:',user)
+        return res.json({
+            data:user,
+            message:"loan approval status  changed successfully"
+        })
+    } catch (error) {
+        if(error.name==='AppError'){
+            return res.status(error.statusCode).json({
+                message: error.message,
+                success: false,
+                error: error.explanation,
+                data: {}
+            });
+        }
+        console.log("Something went wrong in the controller");
+        throw error
+    }
+}
+const getAllCustomers=async(req,res)=>{
+    try {
+
+        const user=await employeeService.getAllCustomers()
+        if(!user){
+            return res.status(StatusCodes.NOT_FOUND).json({
+                success:false,
+                data:user,
+                message:"No user Found"
+            })
+        }
+
+        return res.json({
+            success:true,
+            data:user,
+            message:"Customers fetched successfully"
+        })
+    } catch (error) {
+        if(error.name==='AppError'){
+            return res.status(error.statusCode).json({
+                message: error.message,
+                success: false,
+                error: error.explanation,
+                data: {}
+            });
+        }
+        console.log("Something went wrong in the controller");
+        throw error
+    }
+}
+const getCustomer=async(req,res)=>{
+    try {
+        const {id}=req.body
+        console.log('id in customer:',req.body);
+        const user=await employeeService.getCustomer(id)
+        if(!user){
+            return res.status(StatusCodes.NOT_FOUND).json({
+                success:false,
+                data:user,
+                message:"No user Found"
+            })
+        }
+
+        return res.json({
+            success:true,
+            data:user,
+            message:"customer fetched successfully"
+        })
+    } catch (error) {
+        if(error.name==='AppError'){
+            return res.status(error.statusCode).json({
+                message: error.message,
+                success: false,
+                error: error.explanation,
+                data: {}
+            });
+        }else{
+            return res.status(error.statusCode).json({
+                message: error.message,
+                success: false,
+                error: error.explanation,
+                data: {}
+            });
+        }
+        console.log("Something went wrong in the controller");
+
+    }
+}
 
 
 
 
 
-module.exports = { signup, signin,cutomerCheckIn, generateOtp,userExists}
+
+module.exports = { signup, signin,cutomerCheckIn, generateOtp,userExists,getAllCustomers,getCustomer,documentsVerified,loanSanctioned,loanApproval}

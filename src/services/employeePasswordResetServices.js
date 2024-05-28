@@ -80,15 +80,15 @@ class resetPasswordService{
     }
     async updatePassword(data) {
         try {
-            const { oldPassword,newPassword,confirmNewPassword,userId } = data;
-            const userDetails=await employeeRepository.getUserById(userId)
+            const { oldPassword,newPassword,confirmNewPassword, email } = data;
+            const userDetails=await employeeRepository.getUserByEmail(email)
             console.log(userDetails)
             const passwordCheck=bcrypt.compare(oldPassword,userDetails.password)
 
             if(!passwordCheck){
                     throw new ServiceError(
-                        'Incorrect Password  ',
-                        'Please check your password and try again.',
+                        'Old And New Password Not matching  ',
+                        'Old And New Password Not matching ,Please check your password and try again.',
                         400
                     ); 
  
@@ -109,14 +109,15 @@ class resetPasswordService{
             userDetails.password = encryptedPassword;
             userDetails.token = undefined;
             userDetails.resetPasswordExpires = undefined;
-            const{email,firstName,lastName}=userDetails
+            const{firstName,lastName}=userDetails
             const fullName=`${firstName} ${lastName}`
             console.log(email,firstName)
             await userDetails.save();
             console.log(userDetails)
-            mailsender(email,
-                'Password Updated Successfully',
-                passwordUpdated(email,fullName))
+            // mailsender(email,
+            //     'Password Updated Successfully',
+            //     passwordUpdated(email,fullName),
+            // )
             return { success: true, message: "Password updated successfully." };
 
         } catch (error) {

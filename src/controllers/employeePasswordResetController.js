@@ -50,10 +50,10 @@ const forgetPasswordEmployee = async (req, res) => {
 }
 const updatePassword = async (req, res) => {
     try {
-        const userId=req.token.id
-        console.log(userId)
-        const {oldPassword,newPassword,confirmNewPassword}=req.body
-        const resetToken = await resetPasswordService.updatePassword({ oldPassword,newPassword,confirmNewPassword,userId})
+        // const {email}=req.body
+        // console.log(userId)
+        const {oldPassword,newPassword,confirmNewPassword,email}=req.body
+        const resetToken = await resetPasswordService.updatePassword({ oldPassword,newPassword,confirmNewPassword,email})
         console.log(resetToken);
 
         return res.json({

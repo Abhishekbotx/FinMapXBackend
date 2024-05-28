@@ -237,10 +237,10 @@ class AdminAuthService{
         }
     } 
 
-    async getAdminByToken(token) {
+    async getAdmin(email) {
         try {
-
-            const Admin =await  adminAuthRepository.getAdminByToken(token)
+            console.log('email in controller',email);
+            const Admin =await  adminAuthRepository.getAdminByEmail(email)
             console.log('reviews in services',Admin)
             return Admin
 
@@ -283,42 +283,11 @@ class AdminAuthService{
     //     }
 
     // }
-    // async displayPictureUpdate(userId,displayPicture){
-    //     try {
-    //         const supportedTypes = ["png","jpg","jpeg"];
-    //         const fileType =await  displayPicture.name.split('.').pop().toLowerCase();//extracting filetype
-    //         console.log(fileType)
-    //         const response =await isFileTypeSupported(fileType,supportedTypes)
-    //         if (!response) {
-    //             throw new ServiceError(
-    //                 'Unsupported file type',
-    //                 'Please upload png, jpg or jpeg format only',
-    //                 StatusCodes.BAD_REQUEST
-    //             )
-    //         }
-
-
-    //     const adminDetails=await adminAuthRepository.getAdminById(userId);
-    //     console.log(adminDetails)
-
-    //     const uploadPath = __dirname + "./../utils/uploads/adminProfileImages";
-    //     console.log('beforefileupload')
-    //     const filePath = await uploadFile(displayPicture, uploadPath);
-    //     // userDetails.image = filePath
-
-    //     adminDetails.image= filePath
-    //     adminDetails.save()
-    //     return filePath
-    //     } catch (error) {
-    //         throw error
-    //     }
-
-    // }
-    async updateProfile(data){
+    async displayPictureUpdate(email,displayPicture){
         try {
-            const {fullName,contactNumber,image,token}=data
+            console.log('in services');
             const supportedTypes = ["png","jpg","jpeg"];
-            const fileType =await  image.name.split('.').pop().toLowerCase();//extracting filetype
+            const fileType =await  displayPicture.name.split('.').pop().toLowerCase();//extracting filetype
             console.log(fileType)
             const response =await isFileTypeSupported(fileType,supportedTypes)
             if (!response) {
@@ -327,16 +296,37 @@ class AdminAuthService{
                     'Please upload png, jpg or jpeg format only',
                     StatusCodes.BAD_REQUEST
                 )
-            } 
-        const adminDetails=await adminAuthRepository.getAdminByToken(token);
+            }
+
+
+        const adminDetails=await adminAuthRepository.getAdminByEmail(email);
         console.log(adminDetails)
 
         const uploadPath = __dirname + "./../utils/uploads/adminProfileImages";
         console.log('beforefileupload')
-        const filePath = await uploadFile(image, uploadPath);
+        const filePath = await uploadFile(displayPicture, uploadPath);
+
         // userDetails.image = filePath
 
         adminDetails.image= filePath
+        adminDetails.save()
+        return filePath
+        } catch (error) {
+            throw error
+        }
+
+    }
+    async updateProfile(data){
+        try {
+            const {fullName,contactNumber,email}=data
+          
+        const adminDetails=await adminAuthRepository.getAdminByEmail(email);
+        console.log(adminDetails)
+
+        
+        // userDetails.image = filePath
+
+        // adminDetails.image= filePath
         adminDetails.fullName=fullName
         adminDetails.contactNumber=contactNumber
         adminDetails.save()
@@ -377,6 +367,55 @@ class AdminAuthService{
     //     }
 
     // }
+
+    async updatePassword(data) {
+        try {
+            const { oldPassword,newPassword,confirmNewPassword, email } = data;
+            console.log(newPassword,confirmNewPassword);
+            const userDetails=await adminAuthRepository.getAdminByEmail(email)
+            console.log(userDetails)
+            const passwordCheck=bcrypt.compare(oldPassword,userDetails.password)
+
+            if(!passwordCheck){
+                    throw new ServiceError(
+                        'Old And New Password Not matching  ',
+                        'Old And New Password Not matching ,Please check your password and try again.',
+                        400
+                    ); 
+ 
+            }
+            
+
+
+            if (confirmNewPassword !== newPassword) {
+                throw new ServiceError(
+                    'Password Mismatch',
+                    'newPassword and confirmNewPassword password do not match.',
+                    400
+                );
+            }
+
+
+            const encryptedPassword = await bcrypt.hash(confirmNewPassword, 10);
+            userDetails.password = encryptedPassword;
+            userDetails.token = undefined;
+            userDetails.resetPasswordExpires = undefined;
+            const{firstName,lastName}=userDetails
+            const fullName=`${firstName} ${lastName}`
+            console.log(email,firstName)
+            await userDetails.save();
+            console.log(userDetails)
+            // mailsender(email,
+            //     'Password Updated Successfully',
+            //     passwordUpdated(email,fullName),
+            // )
+            return { success: true, message: "Password updated successfully." };
+
+        } catch (error) {
+            throw error
+        }
+    }
+
 }
 
 module.exports=AdminAuthService

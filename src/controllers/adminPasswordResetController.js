@@ -84,9 +84,9 @@ const updatePassword = async (req, res) => {
             });
         }else {
             console.error('Error in controller:', error.name);
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ 
                 message: error.message || 'Internal Server Error',
-                success: false,
+                success: false, 
                 error: error.explanation || 'Unknown error occurred',
                 data: {}
             });

@@ -73,5 +73,38 @@ const updateDisplayPicture = async (req, res) => {
     }
 };
 
+const getEmployeeProfile = async (req, res) => {
+    try {
+        const {email} = req.body;
+        // console.log('token in getprofile controller.js', token);
+        console.log('req.body', req.body)
+        const response = await profileService.getEmployee(email);
 
-module.exports = { updateProfile, updateDisplayPicture };
+        console.log(response)
+        res.json({
+            success: true,
+            message: 'status changed to Active employee successfully',
+            data: response
+        });
+    } catch (error) {
+        if (error.name == 'ServiceError') {
+            return res.status(error.statusCode).json({
+                message: error.message,
+                success: false,
+                error: error.explaination,
+                data: {}
+            });
+        } else {
+            console.error('Error in controller:', error.name);
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message || 'Internal Server Error',
+                success: false,
+                error: error.explanation || 'Unknown error occurred',
+                data: {}
+            });
+        }
+    }
+};
+
+
+module.exports = { updateProfile, updateDisplayPicture,getEmployeeProfile };

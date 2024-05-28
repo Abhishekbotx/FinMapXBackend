@@ -84,7 +84,22 @@ const customerProfileSchema = new mongoose.Schema({
         required: true,
         ref: "User",
     },
-	
+	documentsUploded:{
+		type:Boolean,
+		default:true
+	},
+	documentsVerified:{
+		type:Boolean,
+		default:false
+	},
+	loanApproved:{
+		type:Boolean,
+		default:false
+	},
+	loanSanctioned:{
+		type:Boolean, 
+		default:false
+	}
 },{
     timestamps: true 
 });

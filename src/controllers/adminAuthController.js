@@ -21,7 +21,8 @@ const signin = async (req, res) => {
         res.cookie('token', response.toString(), options).status(200).json({
             success: true,
             message: 'Admin login successful',
-            token:response
+            token:response,
+            user:email
 
         });
     } catch (error) {
@@ -189,10 +190,10 @@ const signout = async (req, res) => {
 
 const getProfile = async (req, res) => {
     try {
-        const token = req.cookies.token;
-        console.log('token in getprofile controller.js', token);
+        const {email} = req.body;
+        // console.log('token in getprofile controller.js', token);
         console.log('req.body', req.body)
-        const response = await adminAuthService.getAdminByToken(token);
+        const response = await adminAuthService.getAdmin(email);
 
         console.log(response)
         res.json({
@@ -343,9 +344,9 @@ const deleteSubAdmin = async (req, res) => {
 
 const UpdateDisplayPicture = async (req, res) => {
     try {
-        const token = req.cookies.token
-        const userId = req.cookies.id;
-        console.log('userId in updatedisplyer controller:', userId)
+        // const token = req.cookies.token
+        const {email} = req.body
+        console.log('email in updatedisplyer controller:', email)
         // console.log('Req Files',req.files)
 
         if (!req.files || !req.files.Picture) {
@@ -359,7 +360,7 @@ const UpdateDisplayPicture = async (req, res) => {
 
         const DisplayPicture = req.files.Picture
         console.log('displaypicture:', DisplayPicture)
-        const response = await adminAuthService.displayPictureUpdate(userId, DisplayPicture);
+        const response = await adminAuthService.displayPictureUpdate(email, DisplayPicture);
         console.log(response)
         res.status(StatusCodes.OK).json({
             message: 'Profile updated successfully',
@@ -404,9 +405,9 @@ const UpdateProfile = async (req, res) => {
         // console.log('displaypicture:', DisplayPicture)
         // console.log('Req Files',req.files)
         const data = req.body
-        const image = req.files.Picture
-        console.log('displaypicture:', image)
-        const response = await adminAuthService.updateProfile({ ...data, image, token });
+        // const image = req.files.Picture
+        // console.log('displaypicture:', image)
+        const response = await adminAuthService.updateProfile({ ...data });
         console.log(response)
         res.status(StatusCodes.OK).json({
             message: 'Profile updated successfully',
@@ -432,8 +433,36 @@ const UpdateProfile = async (req, res) => {
             data: {}
         });
     }
+    
+}
+
+const updatePassword = async (req, res) => {
+    try {
+        // const {email}=req.body
+        // console.log(userId)
+        const {oldPassword,newPassword,confirmNewPassword,email}=req.body
+        const resetToken = await adminAuthService.updatePassword({ oldPassword,newPassword,confirmNewPassword,email})
+        console.log(resetToken);
+
+        return res.json({
+            success: resetToken.success,
+            message: "password  updated successfully"
+        })
+    } catch (error) {
+        console.log("Something went wrong in the controller:",error);
+        console.log('error name in controller', error.name)
+        if (error.name === 'ServiceError') {
+            return res.status(error.statusCode).json({
+                message: error.message,
+                success: false,
+                error: error.explanation,
+                data: {}
+            });
+        }
+    }
 }
 
 
 
-module.exports = { getAllSubAdmin, createSubAdmin,verifyOtp, deleteSubAdmin,forgetPassword, signin, signout, getProfile, UpdateProfile, UpdateDisplayPicture }
+
+module.exports = { getAllSubAdmin, createSubAdmin,verifyOtp,updatePassword, deleteSubAdmin,forgetPassword, signin, signout, getProfile, UpdateProfile, UpdateDisplayPicture }
