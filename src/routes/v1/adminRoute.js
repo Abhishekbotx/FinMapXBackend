@@ -78,7 +78,7 @@ router.post(
     
 );
 router.get(
-    '/admin/getEmployees',isAuthenticatedMid,isAdmin,getAllEmployees
+    '/Admin/getEmployees',isAuthenticatedMid,isAdmin,getAllEmployees
 )
 router.get(
     '/getAdmin',getProfile
