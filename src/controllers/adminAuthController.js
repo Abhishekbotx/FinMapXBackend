@@ -21,6 +21,7 @@ const signin = async (req, res) => {
         res.cookie('token', response.toString(), options).status(200).json({
             success: true,
             message: 'Admin login successful',
+            token:response
 
         });
     } catch (error) {
