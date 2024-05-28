@@ -46,7 +46,7 @@ router.get(
 
 router.post(
     '/Admin/deleteSubAdmin',isAuthenticatedMid,isAdmin, deleteSubAdmin
-    
+      
 );
 router.put(
     '/Admin/updateDisplayPicture',isAuthenticatedMid,UpdateDisplayPicture
@@ -78,7 +78,7 @@ router.post(
     
 );
 router.get(
-    '/Admin/getEmployees',isAuthenticatedMid,isAdmin,getAllEmployees
+    '/Admin/getEmployees',isAuthenticatedMid,getAllEmployees
 )
 router.get(
     '/getAdmin',getProfile
@@ -92,6 +92,7 @@ router.get(
 router.get(
     '/Admin/getActiveEmployee',isAuthenticatedMid,isAdmin,getActiveEmployee
 )
+
 router.get(
     '/Admin/getAllReview', getAllReview
      

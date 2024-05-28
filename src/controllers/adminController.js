@@ -73,14 +73,14 @@ const getUserTypeEmployees=async(req,res)=>{
 const getActiveEmployee=async(req,res)=>{
     try {
         const response=await adminService.getActiveEmployees()
-        // console.log(response)
+        console.log(response)
         if(response.length==0){
             res.status(StatusCodes.OK).json({
                 success:true,
                 message:'No Inactive Employee Found',
                 data:response
             })
-        }else{res.status(StatusCodes.OK).json({
+        }else{res.status(StatusCodes.OK).json({  
             success:true,
             message:'Accepted succesfully',
             data:response
@@ -106,6 +106,7 @@ const getActiveEmployee=async(req,res)=>{
 }
 const getInactiveEmployees=async(req,res)=>{
     try {
+        console.log('in get inactive cont:');
         const response=await adminService.getInactiveEmployees()
         console.log(response)
         if(response.length==0){

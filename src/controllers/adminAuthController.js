@@ -224,7 +224,7 @@ const getProfile = async (req, res) => {
 
 const getAllSubAdmin = async (req, res) => {
     try {
-
+        console.log('entered in controller of subadmin');
         const response = await adminAuthService.getAllSubAdmin();
         return res.status(StatusCodes.CREATED).json({
             message: 'subAdmin created successfully',

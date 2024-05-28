@@ -9,7 +9,7 @@ const isAuthenticatedMid = async (req, res,next) => {
     try {
 
         const token = req.cookies.token;
-
+        console.log('token in isAuthadmin:',token);
         if (!token) {
             return res.status(401).json({ success: false, message: `Token Missing` });
         }
@@ -75,6 +75,7 @@ const isAdmin = async(req, res, next) => {
             data: {}
         });
     }
+    next()
    } catch (error) {
         
     if (error.name === 'ServiceError') {
