@@ -23,7 +23,7 @@ router.post(
 );
 router.post(
     '/Admin/forgetPassword', resetPasswordToken
-    
+              
 );
 
 router.post(
@@ -36,65 +36,65 @@ router.post(
     
 );
 router.post(
-    '/Admin/addSubAdmin',ValidateMiddleware(SubAdminValidation),createSubAdmin
+    '/Admin/addSubAdmin',isAuthenticatedMid,isAdmin,ValidateMiddleware(SubAdminValidation),createSubAdmin
     
 ); 
 router.get(
-    '/Admin/getAllSubAdmin',isAdmin,getAllSubAdmin
+    '/Admin/getAllSubAdmin',isAuthenticatedMid,isAdmin,getAllSubAdmin
     
 ); 
 
 router.post(
-    '/Admin/deleteSubAdmin',isAdmin, deleteSubAdmin
+    '/Admin/deleteSubAdmin',isAuthenticatedMid,isAdmin, deleteSubAdmin
       
 );
 router.put(
-    '/Admin/updateDisplayPicture',UpdateDisplayPicture
+    '/Admin/updateDisplayPicture',isAuthenticatedMid,UpdateDisplayPicture
     
 );
 router.put(
-    '/Admin/updateProfile',UpdateProfile
+    '/Admin/updateProfile',isAuthenticatedMid,UpdateProfile
     
 );
 
 router.post(
-    '/Admin/activateEmployeeStatus', activateEmployeeActiveStatus
+    '/Admin/activateEmployeeStatus',isAuthenticatedMid,isAdmin, activateEmployeeActiveStatus
     
 );
 router.post(
-    '/Admin/deactivateEmployeeStatus', deactivateEmployeeActiveStatus
+    '/Admin/deactivateEmployeeStatus',isAuthenticatedMid,isAdmin, deactivateEmployeeActiveStatus
     
 );
 router.post(
-    '/Admin/activateEmployee', activateEmployee
+    '/Admin/activateEmployee',isAuthenticatedMid,isAdmin,activateEmployee
     
 );
 router.post(
-    '/Admin/acceptEmployee', acceptEmployee
+    '/Admin/acceptEmployee',isAuthenticatedMid,isAdmin, acceptEmployee
     
 );
 router.post(
-    '/Admin/declineEmployee', declineEmployee
+    '/Admin/declineEmployee',isAuthenticatedMid,isAdmin, declineEmployee
     
 );
 router.get(
-    '/Admin/getEmployees',getAllEmployees
+    '/Admin/getEmployees',isAuthenticatedMid,isAdmin,getAllEmployees
 )
 router.post(
-    '/getAdmin',getProfile
+    '/getAdmin',isAuthenticatedMid,getProfile
 )
 router.get(
-    '/Admin/getUserEmployee',getUserTypeEmployees
+    '/Admin/getUserEmployee',isAuthenticatedMid,isAdmin,getUserTypeEmployees
 )
 router.get(
-    '/Admin/getInactiveEmployee',getInactiveEmployees
+    '/Admin/getInactiveEmployee',isAuthenticatedMid,isAdmin,getInactiveEmployees
 )
 router.get(
-    '/Admin/getActiveEmployee',getActiveEmployee
+    '/Admin/getActiveEmployee',isAuthenticatedMid,isAdmin,getActiveEmployee
 )
 
 router.get(
-    '/Admin/getAllReview', getAllReview
+    '/Admin/getAllReview',isAuthenticatedMid, getAllReview
      
 );
 router.get(
@@ -102,15 +102,15 @@ router.get(
           
 );
 router.post(
-    '/Admin/addReview',ValidateMiddleware(ReviewValidation), addReview
+    '/Admin/addReview',isAuthenticatedMid,ValidateMiddleware(ReviewValidation), addReview
      
 );     
 router.post(
-    '/Admin/deleteReview', deleteReview
+    '/Admin/deleteReview',isAuthenticatedMid, deleteReview
     
 );
 router.put( 
-    '/Admin/updateReview',ValidateMiddleware(UpdateReviewValidation), updateReview
+    '/Admin/updateReview',isAuthenticatedMid,ValidateMiddleware(UpdateReviewValidation), updateReview
     
 );
 
@@ -119,15 +119,15 @@ router.get(
     
 );
 router.post(
-    '/Admin/addNews',ValidateMiddleware(NewsValidation), createNews
+    '/Admin/addNews',isAuthenticatedMid,ValidateMiddleware(NewsValidation), createNews
     
 );
 router.post(
-    '/Admin/deleteNews', deleteNews
+    '/Admin/deleteNews',isAuthenticatedMid, deleteNews
      
 );
 router.post(
-    '/Admin/updatePassword', updatePassword
+    '/Admin/updatePassword',isAuthenticatedMid, updatePassword
      
 );
 

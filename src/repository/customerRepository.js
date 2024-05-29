@@ -27,6 +27,14 @@ class CustomerRepository {
         throw error
     }
  }
+ async getAllCustomersByEmployeeId(id){
+    try {
+        return await CustomerProfile.find({adderId:id})
+        
+    } catch (error) {
+        throw error
+    }
+ }
  async getCustomerById(id){
     try {
         return await CustomerProfile.findOne({_id:id})

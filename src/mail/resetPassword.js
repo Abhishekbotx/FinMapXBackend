@@ -1,4 +1,4 @@
-const newResetPasswordTemplate = (resetLink) => {
+const newResetPasswordTemplate = (url) => {
     return `<!DOCTYPE html>
     <html>
     <head>
@@ -37,7 +37,10 @@ const newResetPasswordTemplate = (resetLink) => {
                 margin: 0 0 20px;
                 text-align: left;
             }
-           
+            a{
+                color: #0073aa;
+            }
+    
            .center{
              text-align: center;
            }
@@ -49,6 +52,15 @@ const newResetPasswordTemplate = (resetLink) => {
             .support-info a {
                 color: #0073aa;
             }
+    
+            .reset {
+                background-color: rgb(39, 221, 39);
+                padding:10px 15px;
+                border-radius:5px ;
+                border-style:none;
+                font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+                cursor: pointer; /* Change cursor to pointer to indicate button behavior */
+            }
         </style>
     </head>
     <body>
@@ -56,23 +68,21 @@ const newResetPasswordTemplate = (resetLink) => {
             <div class="header">
                 <img src="https://res.cloudinary.com/dvtjm1ahg/image/upload/v1715054098/Untitled_design06_xpbkjj.png" alt="FinMap Logo">
             </div>
+            
             <div class="content">
                 <h2>Password Reset Request</h2>
                 <p>Hi there,</p>
                 <p>You requested to reset your FinMap account password. Click the button below to reset it:</p>
-                
-                 copy and paste this link into your browser:</p>
-
-                 <p class="center">${resetLink}</p>
-                
-                <p>This link will expire in 30 minutes. If you didn't request this, please ignore this email or contact our support.</p>
+                <a href=''>${url}<a/>
+                <p>  </p>
+                 <p>Copy and paste this link in your broweser for password reset. This link will expire in 30 minutes. If you didn't request this, please ignore this email or contact our support.</p>
             </div>
             <div class="support-info">
-                <p>If you need further assistance, please reach out to us at <a href="mailto:finmap@gmail.com">finmap@gmail.com</a>.</p>
+                <p>Please dont share this link with anyone.If you need further assistance, please reach out to us at <a href="mailto:finmap@gmail.com">finmap@gmail.com</a>.</p>
             </div>
         </div>
     </body>
-    </html>`
+    </html>`;
 };
 
 module.exports = newResetPasswordTemplate;

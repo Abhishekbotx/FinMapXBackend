@@ -100,8 +100,8 @@ class UserService {
             const passwordcheck = await bcrypt.compare(data.password, userDetails.password);
             if (!passwordcheck) {
                 throw new ServiceError(
-                    'Password not Matching',
-                    'Password and confirmPassword not Matching .',
+                    'Invalid credentials',
+                    'Invalid credentials .',
                     StatusCodes.UNAUTHORIZED
                 );
             }
@@ -111,7 +111,7 @@ class UserService {
                 throw new ServiceError(
                     'Profile Inactive',
                     'Your Profile is Inactive, contact admin for setting it active .',
-                    StatusCodes.UNAUTHORIZED
+                    StatusCodes.BAD_REQUEST
                 );
             }
     
@@ -122,7 +122,7 @@ class UserService {
             };
             const token = await createToken(payload, JWT_KEY, '24h');
     
-            return { success: true, token };
+            return { success: true, token,id:userDetails._id };
         } catch (error) {
             console.error("Something went wrong in the sign-in process:", error);
             return { success: false, message: error.message };
@@ -161,7 +161,7 @@ class UserService {
             const customer = await customerRepository.findCustomerByEmail(email);
             if(!customer){
                 throw new ServiceError(
-                    'Email not stored in db',
+                    'Email not stored in db', 
                     'email not found in db ',
                     StatusCodes.NOT_FOUND 
                 );
@@ -171,7 +171,7 @@ class UserService {
             
             await customer.save()
             console.log(customer);
-            return 'Documents Verification Status Changed'; 
+            return true; 
         } catch (error) {
             throw error;
         }
@@ -180,10 +180,18 @@ class UserService {
     async loanApprove(email) {
         try {
             const customer = await customerRepository.findCustomerByEmail(email);
+            console.log('customer log',customer);
+            if(!customer){
+                throw new ServiceError(
+                    'Email not stored in db', 
+                    'email not found in db ',
+                    StatusCodes.NOT_FOUND 
+                );
+            }
             customer.loanApproved=!customer.loanApproved
             await customer.save()
             
-            return 'Loan Approval Status Changed'; 
+            return true; 
         } catch (error) {
             throw error;
         }
@@ -194,7 +202,7 @@ class UserService {
             customer.loanSanctioned=true
             await customer.save()
             
-            return 'Loan Sanctioned Successfully'; 
+            return true; 
         } catch (error) {
             throw error;
         }
@@ -202,6 +210,21 @@ class UserService {
     async getAllCustomers() {
         try {
             const customer = await customerRepository.getAllCustomers()
+            if(!customer){
+                throw new ServiceError(
+                    'No Customer Found ',
+                    'No Customer Found  db ',
+                    StatusCodes.NOT_FOUND 
+                );
+            }
+            return customer; 
+        } catch (error) {
+            throw error;
+        }
+    }
+    async getCustomersByEmployeeId(id) {
+        try {
+            const customer = await customerRepository.getAllCustomersByEmployeeId(id)
             if(!customer){
                 throw new ServiceError(
                     'No Customer Found ',

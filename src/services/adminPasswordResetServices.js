@@ -12,8 +12,8 @@ class resetPasswordService{
     async resetPasswordToken({email}) {
         try {
             const adminDetails = await adminAuthRepository.getAdminByEmail(email);
-            console.log("userdetails:",adminDetails)
-            if (!userDetails) {
+            // console.log("userdetails:",adminDetails)
+            if (!adminDetails) {
                 throw new ServiceError(
                     'User Not Found',
                     `The email ${email} is not registered with us. Please enter a valid email.`,
@@ -23,21 +23,22 @@ class resetPasswordService{
             
 
             const token = crypto.randomBytes(20).toString("hex");
-            console.log(token)
+            // console.log('token:',token)
             adminDetails.token = token;
             await adminDetails.save();
-            console.log(adminDetails)
-
-            const url = `https://finmapxfront.vercel.app/privatezxl-forgot-password/reset-password/${token}`;
+            // console.log(adminDetails)
+   
+            const url = `https://finmapxfront.vercel.app/privatezxl-forgot-password/reset-password/`+''+`${token}`;
             console.log(url)
+            // console.log('token:',token);
             const message =await mailSend(
                 email,
                 "Password Reset Url",
                 resetPasswordTemplate(url)
                 
-            );
+            ); 
             // console.log(message)
-            return { success: true, message: "Email sent successfully. Please check your email to continue.",messageResponse:message.response };
+            return { success: true, message: "Email sent successfully. Please check your email to continue.",response:message.response};
         } catch (error) {
             console.error("Error in sending reset password token:", error);
             if(error.name=='ServiceError')

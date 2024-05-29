@@ -4,6 +4,7 @@ module.exports={
     ReviewValidation:require('./reviewValidation'),
     UpdateReviewValidation:require('./reviewUpdateValidation'),
     NewsValidation:require('./newsValidation'),
-    CustomerValidation:require('./customerCheckInValidation')
+    CustomerValidation:require('./customerCheckInValidation'),
+    CheckInValidation:require('./checkInValidaton')
 
 }

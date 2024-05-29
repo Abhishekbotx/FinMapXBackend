@@ -7,5 +7,6 @@ module.exports={
     CustomerProfile:require('./customerProfile'),
     Review:require('./review'),
     News:require('./news'),
-    OTP:require('./otp')
+    OTP:require('./otp'),
+    CustomerCheckIn:require('./checkIn')
 }

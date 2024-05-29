@@ -4,10 +4,10 @@ const profileService = new ProfileService();
 
 const updateProfile = async (req, res) => {
     try {
-        const userId = req.token.id;
+        // const userId = req.token.id;
         const data = req.body;
-        console.log('userId:',userId,'data:',data)
-        const response=await profileService.profileUpdate(userId, data);
+        // console.log('userId:',userId,'data:',data)
+        const response=await profileService.profileUpdate( data);
         res.status(StatusCodes.OK).json({ 
             message: 'Profile updated successfully',
             success:true,
@@ -31,7 +31,8 @@ const updateProfile = async (req, res) => {
 
 const updateDisplayPicture = async (req, res) => {
     try {
-        const userId = req.token.id;
+        // const userId = req.token.id;
+        console.log('request body:',req.body.email)
         // console.log('Req Files',req.files)
 
         if (!req.files || !req.files.Picture) {
@@ -45,7 +46,7 @@ const updateDisplayPicture = async (req, res) => {
 
         const DisplayPicture = req.files.Picture
         // console.log('userId:',userId,'data:',data)
-        const response=await profileService.displayPictureUpdate(userId, DisplayPicture);
+        const response=await profileService.displayPictureUpdate(req.body.email, DisplayPicture);
         console.log(response)
         res.status(StatusCodes.OK).json({ 
             message: 'Profile updated successfully',
@@ -79,11 +80,10 @@ const getEmployeeProfile = async (req, res) => {
         // console.log('token in getprofile controller.js', token);
         console.log('req.body', req.body)
         const response = await profileService.getEmployee(email);
-
+        
         console.log(response)
         res.json({
             success: true,
-            message: 'status changed to Active employee successfully',
             data: response
         });
     } catch (error) {

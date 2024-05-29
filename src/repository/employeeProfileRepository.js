@@ -5,8 +5,8 @@ const { StatusCodes } = require('http-status-codes');
 class ProfileRepository {
     async findProfileById(id) {
         try {
-            console.log(id)
-            const profileDetails = await EmployeeProfile.findById(id);
+            console.log('id in profile repo:',id)
+            const profileDetails = await EmployeeProfile.findOne({_id:id});
             if (!profileDetails) {
                 throw new AppError(
                     'ProfileUpdateError',

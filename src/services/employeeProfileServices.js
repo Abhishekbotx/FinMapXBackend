@@ -9,20 +9,21 @@ const employeeRepository = new EmployeeRepository();
 const employeeProfileRepository = new EmployeeProfileRepository();
 
 class ProfileServices {
-    async profileUpdate(userId, data) {
+    async profileUpdate( data) {
         try {
-            const userDetails = await employeeRepository.getUserById(userId);
-            const profileId = userDetails.additionalDetails;
-            const profileDetails = await employeeProfileRepository.findProfileById(profileId);
+            console.log('data in employee services:',data);
+            const userDetails = await employeeRepository.getUserByEmail(data.email);
+            
             const {
                 firstName,
                 lastName,
-                gender = "",
                 dateOfBirth = "",
                 contactNumber = "",
                 address = "",
                 emergencyContact = "",
-                employmentStatus = ""
+                employmentStatus = "",
+                gender='',
+                employmentPosition='',
             } = data;
 
             if (!firstName || !lastName) {
@@ -31,21 +32,22 @@ class ProfileServices {
                     'First name or last name cannot be null',
                     'Please fill first name and last name properly',
                     StatusCodes.BAD_REQUEST
-                );
-            }
+                );  
+            }   
 
-            userDetails.firstName = firstName;
+            userDetails.firstName = firstName; 
             userDetails.lastName = lastName;
+            
+            userDetails.dateOfBirth = dateOfBirth;
+            userDetails.contactNumber = contactNumber;
+            userDetails.gender = gender;
+            userDetails.address = address;
+            userDetails.employmentStatus = employmentStatus;
+            userDetails.emergencyContact = parseInt(emergencyContact);
             await userDetails.save();
+            userDetails.password='heyhelo'
 
-            profileDetails.dateOfBirth = dateOfBirth;
-            profileDetails.contactNumber = contactNumber;
-            profileDetails.gender = gender;
-            profileDetails.address = address;
-            profileDetails.employmentStatus = employmentStatus;
-            profileDetails.emergencyContact = parseInt(emergencyContact);
-
-            return { profileDetails };
+            return { userDetails };
         } catch (error) {
             console.error('Error in profile services:', error);
             throw error
@@ -53,7 +55,7 @@ class ProfileServices {
     }
 
 
-    async displayPictureUpdate(userId, displayPicture) {
+    async displayPictureUpdate(email, displayPicture) {
         try {
             const supportedTypes = ["png", "jpg", "jpeg"];
             const fileType = await displayPicture.name.split('.').pop().toLowerCase();
@@ -67,7 +69,7 @@ class ProfileServices {
                 )
             }
 
-            const userDetails = await employeeRepository.getUserById(userId);
+            const userDetails = await employeeRepository.getUserByEmail(email);
             console.log(userDetails)
 
 
@@ -89,7 +91,14 @@ class ProfileServices {
     async getEmployee(email) {
         try {
             console.log('email in services',email);
-            const employee =await  employeeRepository.getUserByEmail(email)
+            const employee =await employeeRepository.getUserByEmail(email)
+            if(!employee){
+                throw new ServiceError(
+                    'No employee found',
+                    'no employee found with this email',
+                    StatusCodes.BAD_REQUEST
+                )
+            }
             console.log('employee in services',employee)
             return employee
 

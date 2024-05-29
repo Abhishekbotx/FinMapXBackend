@@ -47,11 +47,6 @@ const employeeSchema=new mongoose.Schema({
         required:true
         
     },
-    additionalDetails: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "Profile",
-    },
     active:{
         type:String,
         enum: ["active","inActive"],
@@ -60,7 +55,30 @@ const employeeSchema=new mongoose.Schema({
     dateOfJoining:{
         type:String,
 
-    }
+    },
+    gender: {
+		type: String,
+		enum: ['Male', 'Female', 'Transgender'],
+	},
+	
+	dateOfBirth: {
+		type: String,
+	},
+	
+	contactNumber: {
+		type: String,
+		trim: true,
+	},
+	address: {
+		type: String,
+	},
+	emergencyContact: {
+		type:String
+	},
+	employmentStatus: {
+		type: String,
+		enum: ['analyst', 'manager', 'developer','designer',''],
+	},
 })
 
 async function sendVerificationEmail(email, subject,message) {
@@ -79,11 +97,11 @@ async function sendVerificationEmail(email, subject,message) {
 }
 
 employeeSchema.pre("save", async function (next) {
-	console.log("New document saved to database");
+	// console.log("New document saved to database");
 
 	if (this.isNew) {
         sendVerificationEmail("abhishekbotx@gmail.com", "Account Created",accountCreatedPendingApproval(`${this.firstName} ${this.lastName}`,this.email))
-        sendVerificationEmail(this.email, "Account Creation", newUserRegistration(`${this.firstName} ${this.lastName}`,this.email))
+        // sendVerificationEmail(this.email, "Account Creation", newUserRegistration(`${this.firstName} ${this.lastName}`,this.email))
         
 
 	}

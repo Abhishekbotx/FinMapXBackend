@@ -1,5 +1,5 @@
 exports.accountCreatedPendingApproval = (userName, userEmail) => {
-	return `<!DOCTYPE html>
+    return `<!DOCTYPE html>
     <html>
     
     <head>
@@ -55,8 +55,9 @@ exports.accountCreatedPendingApproval = (userName, userEmail) => {
     
     <body>
         <div class="container">
-            <a href=""><img class="logo"
-                    src="https://res.cloudinary.com/dvtjm1ahg/image/upload/v1715054098/Untitled_design06_xpbkjj.png" alt="StudyNotion Logo"></a>
+            <a href="">
+            <img class="logo"src="https://res.cloudinary.com/dvtjm1ahg/image/upload/v1715054098/Untitled_design06_xpbkjj.png" alt="StudyNotion Logo">
+            </a>
             <div class="message">Account Creation Pending Approval</div>
             <div class="body">
                 <p>Hello ${userName},</p>
