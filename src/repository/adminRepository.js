@@ -10,8 +10,8 @@ class adminRepository {
       return reviews
     } catch (error) {
       throw new AppError(
-        'CreateNewsError',
-        'Error occurred while creating News',
+        'GetReviewError',
+        'Error occurred while getting Reviews',
         error.message,
         StatusCodes.INTERNAL_SERVER_ERROR
       );

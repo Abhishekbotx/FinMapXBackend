@@ -16,10 +16,10 @@ const path = require('path');
 //     "https://finmapxfrontendx.vercel.app/",
 //   ];
   
-  app.use(
+  app.use(  
     cors({
-      origin: "https://finmapxfront.vercel.app/",
-      // origin: "http://localhost:3000",
+      origin: "https://finmapxfront.vercel.app/", 
+      // origin: "http://localhost:3000", 
       credentials: true, 
       methods: ["GET", "POST", "PUT", "DELETE"],
     })
