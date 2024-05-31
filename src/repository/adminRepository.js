@@ -75,6 +75,19 @@ class adminRepository {
       );
     }
   }
+  async getNewsById(id) {
+    try {
+      const news = await News.findOne({_id:id})
+      return news
+    } catch (error) {
+      throw new AppError(
+        'CreateNewsError',
+        'Error occurred while get News Byid',
+        error.message,
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
   async addNews(data) {
     try {
       const news = await News.create({ ...data })

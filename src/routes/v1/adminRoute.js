@@ -6,6 +6,7 @@ const{acceptEmployee,getAllEmployees,getAllReview, declineEmployee,
       deactivateEmployeeActiveStatus, activateEmployeeActiveStatus,
       getUserTypeEmployees,getInactiveEmployees,
       getAllNews,activateEmployee,getActiveEmployee,
+      getNewsById,
     }=require('../../controllers/adminController')
 const{SubAdminValidation,ReviewValidation,NewsValidation, UpdateReviewValidation}=require('./../../validators/index')
 const{ValidateMiddleware}=require('./../../middlewares/index');
@@ -116,6 +117,10 @@ router.put(
 
 router.get(
     '/getAllNews', getAllNews
+    
+);
+router.get(
+    '/getNews/:newsId', getNewsById
     
 );
 router.post(

@@ -464,6 +464,34 @@ const getAllNews = async (req, res) => {
         }
     }
 };
+const getNewsById = async (req, res) => {
+    try {
+        const id=req.params.newsId
+        const response = await adminService.getNewsById(id);
+        res.json({
+            success: true,
+            message: 'news fetched successfully',
+            data: response
+        });
+    } catch (error) {
+        if(error.name == 'ServiceError'){
+            return res.status(error.statusCode).json({
+                message: error.message,
+                success: false,
+                error: error.explaination,
+                data: {}
+            });
+        }else {
+            console.error('Error in controller:', error.name);
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message || 'Internal Server Error',
+                success: false,
+                error: error.explanation || 'Unknown error occurred',
+                data: {}
+            });
+        }
+    }
+};
 
 const createNews=async(req,res)=>{
     try {
@@ -576,6 +604,7 @@ module.exports={
     deleteReview,
     updateReview,
     getAllNews,
+    getNewsById,
     createNews,
     deleteNews,
     getActiveEmployee

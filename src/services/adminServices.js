@@ -266,6 +266,17 @@ class AdminService {
             throw error;
         }
     }
+    async getNewsById(id) {
+        try {
+
+            const News = await adminRepository.getNewsById(id)
+            return News
+
+        } catch (error) {
+            console.log('error in getNewsByID adminservice:', error);
+            throw error;
+        }
+    }
 
     async createNews({ newsImage, editorImage, editorName, newsName, description, newsDate }) {
 
