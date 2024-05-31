@@ -87,7 +87,7 @@ const customerCheckInSchema=z.object({
     employmentType:z.
     string({required_error:"employmentType is required"})
     .trim()
-    .min(3,{message:'employmentType must be minimum of 6 characters'})
+    .min(3,{message:'employmentType must be minimum of 3 characters'})
     .max(15,{message:'employmentType must be maximum of 50 characters'}),
 
     employerName:z.

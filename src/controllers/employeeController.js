@@ -141,11 +141,12 @@ const userExists = async (req, res) => {
         const { email } = req.body;
         const exists = await employeeService.userExists(email);
         console.log(exists);
-        return res.status(StatusCodes.OK).json({
-            message: 'User exists check completed',
-            success: true,
-            exists
-        });
+            return res.status(StatusCodes.OK).json({
+                message: 'User exists check completed',
+                success: exists,
+    
+            });
+       
     } catch (error) {
         if (error.name === 'ServiceError') {
             return res.status(error.statusCode).json({
@@ -212,6 +213,7 @@ const documentsVerified = async (req, res) => {
         return res.json({
             success: response,
             message: "otp created successfully"
+            
         })
     } catch (error) {
         if (error.name === 'AppError') {

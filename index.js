@@ -15,8 +15,8 @@ const path = require('path');
 //     // "http://localhost:5175/",
 //     "https://finmapxfrontendx.vercel.app/",
 //   ];
-
 // origin: "http://localhost:3000", 
+ 
 app.use(  
   cors({
       origin: "https://finmapxfront.vercel.app", 

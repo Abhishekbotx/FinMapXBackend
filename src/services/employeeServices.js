@@ -150,14 +150,17 @@ class UserService {
     async userExists(email) {
         try {
             const user = await employeeRepository.getUserByEmail(email);
-            
-            return !!user; // Return true if user exists, false otherwise
+            if(!user){
+                return false
+            }
+            return true; // Return true if user exists, false otherwise
         } catch (error) {
             throw error;
         }
     }
     async documentsVerify(email) {
         try {
+            console.log('email recieved in employee services:',{email});
             const customer = await customerRepository.findCustomerByEmail(email);
             if(!customer){
                 throw new ServiceError(
@@ -166,11 +169,12 @@ class UserService {
                     StatusCodes.NOT_FOUND 
                 );
             }
-           
+            console.log('email recieved in employee services:',);
             customer.documentsVerified=!customer.documentsVerified
-            
+            console.log('after not operator:',customer.documentsVerified);
             await customer.save()
-            console.log(customer);
+            console.log('after save function:',customer.documentsVerified);
+            console.log(customer); 
             return true; 
         } catch (error) {
             throw error;

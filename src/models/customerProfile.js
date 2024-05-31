@@ -73,7 +73,7 @@ const customerProfileSchema = new mongoose.Schema({
 	},
 	employerName: {
 		type: String,
-		trim: true,
+		trim: true,  
 	},
 	monthlyIncome: {
 		type: Number,

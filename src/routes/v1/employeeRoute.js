@@ -37,7 +37,7 @@ router.post(
     resetPassword
 );
 router.post(
-    '/forgetPassword', forgetPasswordEmployee
+    '/forgetPassword', forgetPasswordEmployee 
     
 );
 router.put(
