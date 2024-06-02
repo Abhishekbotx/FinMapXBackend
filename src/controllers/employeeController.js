@@ -66,15 +66,15 @@ const signin = async (req, res) => {
         });
         console.log('response in controller:', response);
         const options = {
-            expires: new Date(Date.now() + 20 * 60 * 60 * 1000),
+            expires: new Date(Date.now() + 20*60*60*1000),
             httpOnly: true,
-            secure:  'production', // Use secure cookies in production
-            sameSite: 'strict' // or 'lax' or 'none'
+            sameSite: 'none',
+            secure: true
         };
 
         if (response.success) {
-            return res.cookie("token", response.token, options).status(200).json({
-                success: response.success,
+            return res.cookie("token", response.token.toString(), options).status(200).json({
+                success: true,
                 token: response.token,
                 message: `Employee Login Success`,
                 user: email,

@@ -122,7 +122,7 @@ class UserService {
             };
             const token = await createToken(payload, JWT_KEY, '24h');
     
-            return { success: true, token,id:userDetails._id };
+            return { success: true, token:token,id:userDetails._id };
         } catch (error) {
             console.error("Something went wrong in the sign-in process:", error);
             return { success: false, message: error.message };

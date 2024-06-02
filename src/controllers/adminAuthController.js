@@ -11,7 +11,7 @@ const signin = async (req, res) => {
         console.log('response in controller:', response);
 
         const options = {
-            expires: new Date(Date.now() + 500001000),
+            expires: new Date(Date.now() + 20 * 60 * 60 * 1000),
             httpOnly: true,
             sameSite: 'none',
             secure: true
