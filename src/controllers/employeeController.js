@@ -68,6 +68,8 @@ const signin = async (req, res) => {
         const options = {
             expires: new Date(Date.now() + 20 * 60 * 60 * 1000),
             httpOnly: true,
+            secure:  'production', // Use secure cookies in production
+            sameSite: 'strict' // or 'lax' or 'none'
         };
 
         if (response.success) {
