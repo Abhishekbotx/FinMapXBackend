@@ -5,9 +5,9 @@ const { JWT_KEY } = require('./../config/dotenvConfig')
 
 const isAuthenticatedMid = async (req, res, next) => {
     try {
- 
+
         const token = req.cookies.token;
-        // console.log('token in isAuth middleware:',req.cookies.token);
+        console.log('token in isAuth middleware:', req.cookies.token);
 
         if (!token) {
             return res.status(401).json({ success: false, message: `Token Missing` });
@@ -15,7 +15,7 @@ const isAuthenticatedMid = async (req, res, next) => {
 
         try {
             const decodedToken = verifyToken(token, JWT_KEY);
-            if (!decodedToken) { 
+            if (!decodedToken) {
                 throw new ServiceError(
                     'Invalid Token',
                     'The provided token is invalid.',
@@ -88,7 +88,7 @@ const isEmployee = async (req, res, next) => {
     }
 
 
-}; 
+};
 
 
 module.exports = { isAuthenticatedMid, isEmployee }
