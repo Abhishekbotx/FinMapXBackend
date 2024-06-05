@@ -374,9 +374,9 @@ const addReview = async (req, res) => {
 const deleteReview = async (req, res) => {
     try {
         // const {reviewId} = req.body;
-        const data=req.body
-        console.log('req body',req.body.data.reviewId)
-        const response = await adminService.deleteReview(req.body.data.reviewId);
+        // const data=req.body
+        console.log('req body',req.body)
+        const response = await adminService.deleteReview(req.body.reviewId);
         // console.log('after response in controller')
         res.json({
             success: true,

@@ -7,7 +7,7 @@ const {ADMIN_JWT_KEY}=require('./../config/dotenvConfig')
 
 const isAuthenticatedMid = async (req, res,next) => { 
     try {
-        console.log('req.cookies:',req.cookies)
+        // console.log('req.cookies:',req.cookies)
         const token = req.cookies.adminToken;
         console.log('token in isAuthadmin:',token);
         if (!token) {
