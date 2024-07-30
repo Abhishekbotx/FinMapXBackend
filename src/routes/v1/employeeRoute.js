@@ -1,12 +1,14 @@
 const express = require('express');
 const{isAuthenticatedMid}=require('./../../middlewares/authEmployee')
-const {signin,signup,generateOtp,cutomerCheckIn, userExists, documentsVerified, loanApproval, loanSanctioned,getAllCustomers,getCustomersByEmployeeId, getCustomerByItsId} = require('../../controllers/employeeController');
+const{ isAuthenticatedMidAdmin}=require('./../../middlewares/authAdmin')
+const {signin,signup,generateOtp,cutomerCheckIn, userExists, documentsVerified, loanApproval, loanSanctioned,getAllCustomers,getCustomersByEmployeeId, getCustomerByItsId, uploadCibilReport} = require('../../controllers/employeeController');
 const {forgetPasswordEmployee,resetPassword,updatePassword} = require('../../controllers/employeePasswordResetController');
 const { updateProfile,updateDisplayPicture ,getEmployeeProfile} = require('../../controllers/employeeProfileController');
 const upload = require('../../utils/fileuploadTest');
 const {EmployeeSignupValidation,CustomerValidation, CustomerCheckInValidation, CheckInValidation}=require('./../../validators/index')
 const {ValidateMiddleware}=require('./../..//middlewares/index');
 const { customerCheckIn } = require('../../controllers/customerSideCheckInController');
+const { isAdmin } = require('../../middlewares/authAdmin');
 const router = express.Router();
 
 
@@ -49,7 +51,7 @@ router.put(
     
 );
 
-router.post(
+router.post( 
     '/checkCustomerExists',isAuthenticatedMid, userExists
     
 );      
@@ -70,7 +72,7 @@ router.get(
     
 );
 router.post(
-    '/getCustomerByEmployeeId',isAuthenticatedMid, getCustomersByEmployeeId
+    '/getCustomerByEmployeeId',isAuthenticatedMid || isAuthenticatedMidAdmin, getCustomersByEmployeeId
     
 );
 router.post( 
@@ -83,17 +85,19 @@ router.post(
 )
 router.post( 
     '/getCustomerProfile',isAuthenticatedMid,getCustomerByItsId 
-       
+        
 );
-  
+   
 router.post(
-    '/upload',upload
+    '/uploadFetchReport',uploadCibilReport 
     
 );
 router.post(
     '/checkIn',ValidateMiddleware(CheckInValidation),customerCheckIn
     
-);
+); 
+
+
 
 
 module.exports = router;

@@ -29,6 +29,20 @@ class AdminAuthRepository {
             throw error;
         }
     }
+    async getAdminById(adminId) { 
+        try {
+            const user = await Admin.findById(adminId);
+            // console.log('user:',user)
+            return user;
+        } catch (error) {
+            // if (error.name === 'ValidationError') {
+            //     'error in finding admin'
+            // } 
+            console.log("Something went wrong on the repository layer");
+            console.log("error name:", error.name);
+            throw error;
+        }
+    }
     async getAdminByToken(token) {
         try {
             console.log('token in repo',token)

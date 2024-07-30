@@ -18,13 +18,28 @@ const signin = async (req, res) => {
         };
 
 
-        res.cookie('adminToken', response.toString(), options).status(200).json({
-            success: true,
-            message: 'Admin login successful',
-            token:response,
-            user:email
+        // res.cookie('adminToken', response.toString(), options).status(200).json({
+        //     success: true,
+        //     message: 'Admin login successful',
+        //     token:response,
+        //     user:email
 
-        });
+        // });
+
+        if (response.success) {
+            return res.cookie("adminToken", response.token.toString(), options).status(200).json({
+                success: true,
+                token: response.token,
+                message: `Admin Login Success`,
+                user: email,
+                adminId: response.id
+            });
+        } else {
+            return res.status(401).json({
+                success: false,
+                message: response.message
+            });
+        }
     } catch (error) {
         if (error.name === 'ServiceError') {
             return res.status(error.statusCode).json({
@@ -190,10 +205,10 @@ const signout = async (req, res) => {
 
 const getProfile = async (req, res) => {
     try {
-        const {email} = req.body;
+        const {adminId} = req.body;
         // console.log('token in getprofile controller.js', token);
         console.log('req.body', req.body)
-        const response = await adminAuthService.getAdmin(email);
+        const response = await adminAuthService.getAdmin(adminId);
 
         console.log(response)
         res.json({

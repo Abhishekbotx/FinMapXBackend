@@ -25,7 +25,7 @@ const getAllEmployees = async(req, res) => {
                 data: {}
             });
         }else {
-            console.error('Error in controller:', error.name);
+            console.error('Error in controller hai:', error.name);
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message || 'Internal Server Error',
                 success: false,
@@ -522,7 +522,7 @@ const createNews=async(req,res)=>{
         
         res.json({
             success: true,
-            message: 'Review added successfully',
+            message: 'news added successfully',
             data: response
         });
     } catch (error) {
@@ -567,7 +567,7 @@ const deleteNews = async (req, res) => {
         // }
         res.json({
             success: true,
-            message: 'review deleted successfully',
+            message: 'news deleted successfully',
             // data: response
         });
     } catch (error) {
@@ -590,6 +590,159 @@ const deleteNews = async (req, res) => {
     }
 }
 
+
+const getAllArticle = async (req, res) => {
+    try {
+        const response = await adminService.getArticles();
+        res.json({
+            success: true,
+            message: 'articles fetched successfully',
+            data: response
+        });
+    } catch (error) {
+        if(error.name == 'ServiceError'){
+            return res.status(error.statusCode).json({
+                message: error.message,
+                success: false,
+                error: error.explaination,
+                data: {}
+            });
+        }else {
+            console.error('Error in controller:', error.name);
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message || 'Internal Server Error',
+                success: false,
+                error: error.explanation || 'Unknown error occurred',
+                data: {}
+            });
+        }
+    }
+};
+const getArticleById = async (req, res) => {
+    try {
+        const id=req.params.articleId
+        const response = await adminService.getArticleById(id);
+        res.json({
+            success: true,
+            message: 'article fetched successfully',
+            data: response
+        });
+    } catch (error) {
+        if(error.name == 'ServiceError'){
+            return res.status(error.statusCode).json({
+                message: error.message,
+                success: false,
+                error: error.explaination,
+                data: {}
+            });
+        }else {
+            console.error('Error in controller:', error.name);
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message || 'Internal Server Error',
+                success: false,
+                error: error.explanation || 'Unknown error occurred',
+                data: {}
+            });
+        }
+    }
+};
+
+const createArticle=async(req,res)=>{
+    try {
+        let data = {};
+        let reqData=req.body
+        console.log('request body:',req.body)
+         
+        if (!req.files || !req.files.editorImage || !req.files.articleImage) {
+            res.json({
+                message:'picture is not present'
+            })
+        }
+
+        if (req.files && req.files.editorImage &&req.files.articleImage) {
+            data.ArticleImage = req.files.articleImage;
+            data.editorImage = req.files.editorImage;
+        }
+
+        if (data.length === 0) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                message: 'No data provided',
+                success: false,
+                explanation: 'Please provide either structured data in req.body or a file in req.files',
+            });
+        }
+
+        const response = await adminService.createArticle({...data,...reqData});
+        
+        res.json({
+            success: true,
+            message: 'Review added successfully',
+            data: response
+        });
+    } catch (error) {
+        if (error.name === 'ServiceError') {
+            return res.status(error.statusCode).json({
+                message: error.message || 'Internal Server Error',
+                success: false,
+                error: error.explanation || 'Unknown error occurred',
+                data: {}
+            });
+        }
+        else if (error.name === 'CreateArticleError') {
+            return res.status(error.statusCode).json({
+                message: error.message || 'Internal Server Error',
+                success: false,
+                error: error.explanation || 'Unknown error occurred',
+                data: {}
+            });
+        }else{
+            console.error('Error in controller:', error.name);
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message || 'Internal Server Error',
+                success: false,
+                error: error.explanation || 'Unknown error occurred',
+                data: {}
+            });
+        }
+    }
+}
+
+const deleteArticle = async (req, res) => {
+    try {
+        const {articleId} = req.body;
+        console.log('ArticleId',articleId)
+        const response = await adminService.deleteArticle(articleId);
+        // console.log('after response in controller:',response)
+        // if(!response){
+        //     res.json({
+        //         message:"no Article was deleted",
+        //         success:false
+        //     })
+        // }
+        res.json({
+            success: true,
+            message: 'Article deleted successfully',
+            // data: response
+        });
+    } catch (error) {
+        if (error.name === 'DeletArticleError') {
+            return res.status(error.statusCode).json({
+                message: error.message || 'Internal Server Error',
+                success: false,
+                error: error.explanation || 'Unknown error occurred',
+                data: {}
+            });
+        }else{
+            console.error('Error in controller:', error.name);
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message || 'Internal Server Error',
+                success: false,
+                error: error.explanation || 'Unknown error occurred',
+                data: {}
+            });
+        }
+    }
+}
 module.exports={
     getAllEmployees,
     getUserTypeEmployees,
@@ -607,5 +760,9 @@ module.exports={
     getNewsById,
     createNews,
     deleteNews,
-    getActiveEmployee
+    getActiveEmployee,
+    getAllArticle,
+    createArticle,
+    deleteArticle,
+    getArticleById
 }

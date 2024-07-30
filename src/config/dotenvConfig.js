@@ -14,6 +14,7 @@ module.exports={
     API_SECRET:process.env.API_SECRET,
     FOLDER:process.env.FOLDER,  
     ADMIN_FOLDER:process.env.ADMIN_FOLDER, 
-    Mongo_URL:process.env.Mongo_URL
+    Mongo_URL:process.env.Mongo_URL,
+    OPENAI_API_KEY:process.env.OPENAI_API_KEY
 
 }

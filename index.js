@@ -6,7 +6,7 @@ const db=require('./src/config/dbConfig')
 const cors = require('cors') 
 const app = express(); 
 const path = require('path');
-// const cloudinary=require('./src/config/cloudinaryConfig')
+
 
 
 // const allowedOrigins = [
@@ -15,15 +15,17 @@ const path = require('path');
 //     // "http://localhost:5175/",
 //     "https://finmapxfrontendx.vercel.app/",
 //   ];
-// origin: "http://localhost:3000", 
- 
+
 app.use(  
   cors({
-      origin: "https://finmapxfront.vercel.app", 
+    // origin: "http://localhost:3001", 
+      origin: "https://finmapxtest.vercel.app", 
       credentials: true, 
       methods: ["GET", "POST", "PUT", "DELETE"],
     }) 
   );
+
+  // app.use(cors());
   
 
 

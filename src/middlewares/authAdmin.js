@@ -5,7 +5,7 @@ const{AdminAuthRepository}=require('../repository/index')
 const adminAuthRepository=new AdminAuthRepository()
 const {ADMIN_JWT_KEY}=require('./../config/dotenvConfig') 
 
-const isAuthenticatedMid = async (req, res,next) => { 
+const isAuthenticatedMidAdmin = async (req, res,next) => { 
     try {
         // console.log('req.cookies:',req.cookies)
         const token = req.cookies.adminToken;
@@ -72,7 +72,7 @@ const isAdmin = async(req, res, next) => {
             message: 'Unauthorized',
             success: false,
             error: 'Only admins are allowed to access this resource',
-            data: {}
+            data: {} 
         });
     }
     next()
@@ -100,4 +100,4 @@ const isAdmin = async(req, res, next) => {
     
 };
 
-module.exports={isAuthenticatedMid,isAdmin}
+module.exports={isAuthenticatedMidAdmin,isAdmin}

@@ -1,6 +1,18 @@
 const { StatusCodes } = require('http-status-codes');
 const { EmployeeService } = require('../services/index.js');
 const { AppError } = require('../utils/errors/index.js');
+const fs = require('fs');
+const path = require('path');
+const pdf = require('pdf-parse');
+
+const { Configuration, OpenAIApi } = require('openai');
+
+
+// const openai = new OpenAI(configuration);
+
+// const openai = new OpenAIApi(configuration);
+
+const { OPENAI_API_KEY } = require('./../config/dotenvConfig.js')
 
 const employeeService = new EmployeeService();
 
@@ -66,7 +78,7 @@ const signin = async (req, res) => {
         });
         console.log('response in controller:', response);
         const options = {
-            expires: new Date(Date.now() + 20*60*60*1000),
+            expires: new Date(Date.now() + 20 * 60 * 60 * 1000),
             httpOnly: true,
             sameSite: 'none',
             secure: true
@@ -143,12 +155,12 @@ const userExists = async (req, res) => {
         const { email } = req.body;
         const exists = await employeeService.userExists(email);
         console.log(exists);
-            return res.status(StatusCodes.OK).json({
-                message: 'User exists check completed',
-                success: exists,
-    
-            });
-       
+        return res.status(StatusCodes.OK).json({
+            message: 'User exists check completed',
+            success: exists,
+
+        });
+
     } catch (error) {
         if (error.name === 'ServiceError') {
             return res.status(error.statusCode).json({
@@ -215,7 +227,7 @@ const documentsVerified = async (req, res) => {
         return res.json({
             success: response,
             message: "otp created successfully"
-            
+
         })
     } catch (error) {
         if (error.name === 'AppError') {
@@ -225,7 +237,7 @@ const documentsVerified = async (req, res) => {
                 error: error.explanation,
                 data: {}
             });
-        }  else if (error.name === 'ServiceError') {
+        } else if (error.name === 'ServiceError') {
             return res.status(error.statusCode).json({
                 message: error.message || 'Internal Server Error',
                 success: false,
@@ -265,7 +277,7 @@ const loanApproval = async (req, res) => {
                 error: error.explanation,
                 data: {}
             });
-        }  else if (error.name === 'ServiceError') {
+        } else if (error.name === 'ServiceError') {
             return res.status(error.statusCode).json({
                 message: error.message || 'Internal Server Error',
                 success: false,
@@ -304,7 +316,7 @@ const loanSanctioned = async (req, res) => {
                 error: error.explanation,
                 data: {}
             });
-        }  else if (error.name === 'ServiceError') {
+        } else if (error.name === 'ServiceError') {
             return res.status(error.statusCode).json({
                 message: error.message || 'Internal Server Error',
                 success: false,
@@ -348,7 +360,7 @@ const getAllCustomers = async (req, res) => {
                 error: error.explanation,
                 data: {}
             });
-        }  else if (error.name === 'ServiceError') {
+        } else if (error.name === 'ServiceError') {
             return res.status(error.statusCode).json({
                 message: error.message || 'Internal Server Error',
                 success: false,
@@ -394,7 +406,7 @@ const getCustomersByEmployeeId = async (req, res) => {
                 error: error.explanation,
                 data: {}
             });
-        }  else if (error.name === 'ServiceError') {
+        } else if (error.name === 'ServiceError') {
             return res.status(error.statusCode).json({
                 message: error.message || 'Internal Server Error',
                 success: false,
@@ -438,7 +450,7 @@ const getCustomerByItsId = async (req, res) => {
                 error: error.explanation,
                 data: {}
             });
-        }  else if (error.name === 'ServiceError') {
+        } else if (error.name === 'ServiceError') {
             return res.status(error.statusCode).json({
                 message: error.message || 'Internal Server Error',
                 success: false,
@@ -459,8 +471,133 @@ const getCustomerByItsId = async (req, res) => {
 }
 
 
+const uploadController = async (req, res) => {
+    try {
+        const file = req.files.cibilReport;
+        // const folder = 'cibil-reports'; 
+        const uploadPath = __dirname + "./../utils/fileUpload";
+        console.log('beforefileupload')
+        const filename = await uploadFile(file, uploadPath);
+
+        res.status(StatusCodes.OK).json({
+            message: 'File uploaded successfully',
+            filename
+        });
+    } catch (error) {
+        if (error instanceof ServiceError) {
+            res.status(error.statusCode).json({
+                error: error.message,
+                details: error.details
+            });
+        } else {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                error: 'Internal Server Error',
+                details: error.message
+            });
+        }
 
 
 
+    }
+};
 
-module.exports = { signup, signin, cutomerCheckIn, generateOtp, userExists, getCustomersByEmployeeId, getAllCustomers, getCustomerByItsId, documentsVerified, loanSanctioned, loanApproval }
+const { OpenAI } = require('openai');
+const { uploadFile } = require('../utils/fileupload.js');
+
+const openai = new OpenAI({
+    apiKey: OPENAI_API_KEY
+});
+
+const uploadCibilReport = async (req, res) => {
+    console.log('in cibil');
+    const file = req.files.cibilReport;
+    if (!file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    console.log('file:', file);
+
+    try {
+        const pdfData = await pdf(file.tempFilePath);
+        // console.log('pdfData:', pdfData);
+
+        // const cibilReportText = pdfData.text;
+        // console.log('cibilReportText:', cibilReportText);
+
+    } catch (error) {
+        console.error('Error in PDF parsing:', error);
+        res.status(500).json({ message: 'Error in PDF parsing' });
+    }
+    console.log('file:', file);
+
+    try {
+        const dataBuffer = fs.readFileSync(file.tempFilePath);
+        const pdfData = await pdf(dataBuffer);
+        // console.log('pdfData:', pdfData);
+
+        const cibilReportText = pdfData.text;
+        // console.log('cibilReportText:', cibilReportText);
+
+        const contextData = loadContextData('data');
+        const prompt = `Context: ${contextData}\n\nCIBIL Report: ${cibilReportText}\n\nUser Input: ${req.body.userInput}\n\nResponse:`;
+
+        try {
+            const response = await openai.chat.completions.create({
+                model: "gpt-4",
+                messages: [
+                    { role: "system", content:
+                         'You are a helpful assistant , now you have all the bank policy data and the cibil report aswell want you to give 3 best personal loans and the duration which bank(its name)  is giving  need it in json keys value object like this,{bankName ,loanType ,interestRate,loanAmount,tenure},i dont need any other suggestion need array of object',
+                         },
+                    { role: "user", content: prompt }
+                ]
+            });
+
+
+            const loansData = JSON.parse(response.choices[0].message.content);
+             
+            // Return the loans as key-value pair objects
+            // const formattedContent = response.choices[0].message.content.replace(/\n'\s*\+\s*/g, ' ');
+            console.log("Loans:", loansData);
+            res.json({ loans: loansData });
+        } catch (error) {
+            console.error("Error generating response:", error);
+            res.status(500).send("Error generating response");
+        }
+
+    } catch (error) {
+        console.error('Error in PDF parsing:', error);
+        res.status(500).json({ message: 'Error in PDF parsing' });
+    } finally {
+        if (fs.existsSync(file.path)) {
+            fs.unlinkSync(file.path);  // Clean up uploaded file
+        }
+    }
+};
+
+async function loadContextData(contextDir) {
+    console.log('in load context data');
+    let contextData = '';
+    const files = fs.readdirSync(contextDir);
+    console.log('files in loadContext:', files);
+
+    for (const file of files) {
+        const filePath = path.join(contextDir, file);
+        if (fs.statSync(filePath).isFile() && file.endsWith('.pdf')) {
+            try {
+                const dataBuffer = fs.readFileSync(filePath);
+                const pdfData = await pdf(dataBuffer);
+                contextData += pdfData.text + "\n\n";
+                // console.log(`Extracted text from ${file}:`, pdfData.text);
+            } catch (error) {
+                console.error(`Error parsing PDF file ${file}:`, error);
+            }
+        }
+    }
+
+    console.log('context data:', contextData);
+    return contextData;
+}
+
+
+
+module.exports = { signup, signin, cutomerCheckIn, uploadCibilReport, generateOtp, userExists, getCustomersByEmployeeId, getAllCustomers, getCustomerByItsId, documentsVerified, loanSanctioned, loanApproval } 

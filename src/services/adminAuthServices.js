@@ -126,7 +126,7 @@ class AdminAuthService{
 
             // console.log(adminDetails)
             // console.log('before returning token');
-            return token 
+            return {token:token,success:true,id:adminDetails._id  }
         } catch (error) {
             console.error("Something went wrong in the sign-in process:", error);
             throw error;
@@ -237,10 +237,10 @@ class AdminAuthService{
         }
     } 
 
-    async getAdmin(email) {
+    async getAdmin(adminId) {
         try {
-            console.log('email in controller',email);
-            const Admin =await  adminAuthRepository.getAdminByEmail(email)
+            console.log('email in controller',adminId);
+            const Admin =await  adminAuthRepository.getAdminById(adminId)
             console.log('reviews in services',Admin)
             return Admin
 

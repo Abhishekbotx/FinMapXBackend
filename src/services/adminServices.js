@@ -206,7 +206,7 @@ class AdminService {
         try {
             // const { reviewId, name, profession, review, rating, reviewPicture } = data
             const { reviewId, fullName, profession, review } = data
-            console.log('name:',fullName)
+            console.log('name:', fullName)
             // const uploadPath = __dirname + "./../utils/uploads/reviewImage";
             console.log('beforefileupload')
             // const filePath = await uploadFile(reviewPicture, uploadPath);
@@ -220,14 +220,14 @@ class AdminService {
 
             // const reviewImage = filePath
             const reviewDetails = await adminRepository.findReviewById(reviewId)
-            if(!reviewDetails){
+            if (!reviewDetails) {
                 throw new ServiceError(
                     'No review Error',
                     'Unable to fetch review ',
                     StatusCodes.BAD_REQUEST
                 )
             }
-            console.log('reviewdetails:',reviewDetails)
+            console.log('reviewdetails:', reviewDetails)
             reviewDetails.name = fullName
             reviewDetails.profession = profession
             reviewDetails.review = review
@@ -329,6 +329,83 @@ class AdminService {
             throw error;
         }
     }
+
+
+    async getArticles() {
+        try {
+
+            const Articles = await adminRepository.getAllArticles()
+            return Articles
+
+        } catch (error) {
+            console.log('error in addAsEmployee adminservice:', error);
+            throw error;
+        }
+    }
+    async getNewsById(id) {
+        try {
+
+            const Articles = await adminRepository.getNewsById(id)
+            return Articles
+
+        } catch (error) {
+            console.log('error in getNewsByID adminservice:', error);
+            throw error;
+        }
+    }
+
+    async createArticles({ newsImage, editorImage, editorName, newsName, description, newsDate }) {
+
+        try {
+
+            const articleImagefilePath = await uploadFile(articleImage, 'articleImage');
+            if (!articleImagefilePath) {
+                throw new ServiceError(
+                    'articleImageUpload Error',
+                    'Unable to upload newsImage',
+                    StatusCodes.BAD_REQUEST
+                )
+            }
+
+            const articlePicture = articleImagefilePath
+
+
+            const editorImagefilePath = await uploadFile(editorImage, 'editorImages');
+            const editorPicture = editorImagefilePath
+            // console.log('beforefileupload')
+            // const editorfilePath = await uploadFile(editorImage, editoruploadPath);
+            if (!editorImagefilePath) {
+                throw new ServiceError(
+                    'editorImageUpload Error',
+                    'Unable to upload editorImage',
+                    StatusCodes.BAD_REQUEST
+                )
+            }
+            // console.log('Image in services:',Image)
+            const News = await adminRepository.addNews({
+                editorName, newsName, description, articlesImage: articlePicture,
+                editorImage: editorPicture, newsDate: newsDate
+            });
+            return News
+
+        } catch (error) {
+            console.log('error in createNews adminservice:', error);
+            throw error;
+        }
+    }
+
+    async deleteNews(newsId) {
+        try {
+            console.log('newsId in service layer:', newsId)
+            const NewsId = adminRepository.deleteNews(newsId);
+            return NewsId
+
+        } catch (error) {
+            console.log('error in addAsEmployee adminservice:', error);
+            throw error;
+        }
+    }
+
 
 }
 

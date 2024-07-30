@@ -5,6 +5,7 @@ const {StatusCodes}=require('http-status-codes')
 
 const uploadFile = async (file, folder) => {
     try {
+        console.log('entered file upload');
         if (!file) {
             throw new ServiceError(
                 'no file Error',
@@ -17,12 +18,12 @@ const uploadFile = async (file, folder) => {
         const filename = `${Date.now()}_${file.name}`;
         const uploadDir = path.resolve(__dirname, './uploads', folder);
 
-        // Ensure the directory exists
+
         await fs.promises.mkdir(uploadDir, { recursive: true });
 
         const filePath = path.join(uploadDir, filename);
 
-        // Move the file
+
         await file.mv(filePath, (err) => {
             if (err) {
                 throw err;

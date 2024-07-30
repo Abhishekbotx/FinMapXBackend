@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-// const{ADMIN_JWT_KEY}=require('./../config/dotenvConfig')
+
 
 const isFileTypeSupported=async(fileType, supportedTypes)=> {
     return supportedTypes.includes(fileType);
@@ -7,8 +7,7 @@ const isFileTypeSupported=async(fileType, supportedTypes)=> {
 
 const verifyToken=(token,securityKey)=>{
     try {
-        const decodedToken = jwt.verify(token, securityKey);
-        // console.log('decodedToken:',decodedToken)
+        const decodedToken=jwt.verify(token,securityKey)
         return decodedToken;
     } catch (error) {
         console.error("Something went wrong in token verification:", error);

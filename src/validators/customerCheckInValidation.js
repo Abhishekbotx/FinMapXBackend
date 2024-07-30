@@ -97,17 +97,18 @@ const customerCheckInSchema=z.object({
     .max(15,{message:'employerName must be maximum of 50 characters'}),
 
     monthlyIncome:z.
-    number({required_error:"monthlyincome is required"})
-    .min(1000,"a minimum of 1000 is required"),
+    string({required_error:"monthlyincome is required"})
+    .refine(
+            (income) => {
+                if (!income) return false; 
+                const numberForm=Number(income)
+                return numberForm  
+            },
+            { 
+                message: "", 
 
-
-
-
-
-
-
-    
-
+            }
+        ).optional(),
 
 })
 
